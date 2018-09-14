@@ -1,5 +1,5 @@
-# Apartmanater
-Apmartmanater is an apartment management application, powered by JavaFX.
+# Apanater
+Apanater is an apartment management application, powered by JavaFX.
 
 
 # Persona
