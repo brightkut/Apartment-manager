@@ -6,11 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class TemplateController {
+
+    @FXML
+    private GridPane gridPane;
 
     //ปุ่มของเมนู
     @FXML
@@ -25,10 +29,8 @@ public class TemplateController {
     //ไปหน้าค้นหาจากเมนู
     @FXML
     void handleFeature1Btn(ActionEvent event) throws IOException {
-        Stage stage = (Stage) feature1Btn.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Feature1Page1.fxml"));
-        stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
-        stage.show();
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
     //ไปหน้าแจ้งชำระจากเมนู
