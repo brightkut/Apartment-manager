@@ -8,9 +8,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/ViewTemplate.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
         primaryStage.setTitle("Apanater");
         primaryStage.setScene(new Scene(root, 1280, 800));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

@@ -2,9 +2,19 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-public class ControllerTemplate {
+import java.io.IOException;
+
+public class TemplateController {
+
+    @FXML
+    private GridPane gridPane;
 
     //ปุ่มของเมนู
     @FXML
@@ -18,8 +28,9 @@ public class ControllerTemplate {
 
     //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
-
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
     //ไปหน้าแจ้งชำระจากเมนู
