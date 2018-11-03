@@ -2,9 +2,15 @@ package Controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
-public class ControllerTemplate {
+import java.io.IOException;
+
+public class TemplateController {
 
     //ปุ่มของเมนู
     @FXML
@@ -18,8 +24,11 @@ public class ControllerTemplate {
 
     //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
-
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        Stage stage = (Stage) feature1Btn.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Feature1Page1.fxml"));
+        stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
+        stage.show();
     }
 
     //ไปหน้าแจ้งชำระจากเมนู
