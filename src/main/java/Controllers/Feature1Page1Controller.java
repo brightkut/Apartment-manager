@@ -3,6 +3,7 @@ package Controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -89,15 +90,40 @@ public class Feature1Page1Controller {
 
     }
 
-
     @FXML
     void handleDailyBtn(ActionEvent event) {
-
+        if (toDatePicker.isDisable()) {
+            swapDisable(numMonthField);
+            swapDisable(numMonthLabel);
+            numMonthField.setText("");
+            swapDisable(toDatePicker);
+            toDatePicker.setValue(null);
+            swapDisable(toDateLabel);
+        }
     }
 
     @FXML
     void handleMonthlyBtn(ActionEvent event) {
+        if (numMonthField.isDisable()) {
+            swapDisable(toDatePicker);
+            toDatePicker.setValue(null);
+            swapDisable(toDateLabel);
+            swapDisable(numMonthField);
+            numMonthField.setText("1");
+            swapDisable(numMonthLabel);
+        }
+    }
 
+    @FXML
+    private void swapDisable(Node node) {
+        if (node.isDisable()) {
+            node.setDisable(false);
+            node.setVisible(true);
+        }
+        else {
+            node.setDisable(true);
+            node.setVisible(false);
+        }
     }
 
     @FXML
