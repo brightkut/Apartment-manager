@@ -67,7 +67,7 @@ public class Feature1Page1Controller {
     @FXML
     void handleFeature1Btn(ActionEvent event) throws IOException {
         Stage stage = (Stage) searchBtn.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/Feature1Page1.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page1.fxml"));
         stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
         stage.show();
     }
