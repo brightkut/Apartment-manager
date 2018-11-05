@@ -83,7 +83,8 @@ public class SqlConnection {
                             "\t`id_reserve`\tINTEGER,\n" +
                             "\t`date_pay_debt`\tTEXT,\n" +
                             "\t`debt_balance`\tNUMERIC,\n" +
-                            "\t`status`\tTEXT\n" +
+                            "\t`status`\tTEXT,\n" +
+                            "\tFOREIGN KEY(`id_reserve`) REFERENCES `Reservation`(`id_reserve`)\n" +
                             ");";
                     Statement s = c.createStatement();
                     s.execute(query);
@@ -138,7 +139,7 @@ public class SqlConnection {
                             "\t`id_type_room`\tINTEGER,\n" +
                             "\t`floor`\tINTEGER,\n" +
                             "\t`status`\tTEXT,\n" +
-                            "\tFOREIGN KEY(`id_type_room`) REFERENCES `Room`\n" +
+                            "\tFOREIGN KEY(`id_type_room`) REFERENCES `TypeRoom`\n" +
                             ");";
                     Statement s = c.createStatement();
                     s.execute(query);
@@ -164,7 +165,6 @@ public class SqlConnection {
                             "\t`rent_per_month`\tNUMERIC,\n" +
                             "\t`rent_per_day`\tNUMERIC,\n" +
                             "\t`status`\tTEXT,\n" +
-                            "\tFOREIGN KEY(`id_type_room`) REFERENCES `Room`\n" +
                             ");";
                     Statement s = c.createStatement();
                     s.execute(query);
