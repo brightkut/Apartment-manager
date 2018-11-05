@@ -2,7 +2,7 @@ package Models;
 
 import java.sql.*;
 import java.util.ArrayList;
-
+//hi
 public class SqlConnection {
     private static Connection connect() {
         //check connection is null
