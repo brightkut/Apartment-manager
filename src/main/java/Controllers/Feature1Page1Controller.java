@@ -82,7 +82,10 @@ public class Feature1Page1Controller {
     }
 
     @FXML
-    void handleFeature4Btn(ActionEvent event) {
+    void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+        gridPane.getChildren().setAll(pane);
 
     }
 
