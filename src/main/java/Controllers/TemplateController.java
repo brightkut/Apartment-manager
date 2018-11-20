@@ -35,13 +35,17 @@ public class TemplateController {
 
     //ไปหน้าแจ้งชำระจากเมนู
     @FXML
-    void handleFeature2Btn(ActionEvent event) {
-
+    void handleFeature2Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/room-main.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
     //ไปหน้าจัดการห้องจากเมนู
     @FXML
-    void handleFeature4Btn(ActionEvent event) {
+    void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+        gridPane.getChildren().setAll(pane);
 
     }
 
