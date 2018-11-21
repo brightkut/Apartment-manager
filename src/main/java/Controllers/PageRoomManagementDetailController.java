@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.RoomManagementDetail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,7 +17,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class PageRoomManagementDetail {
+public class PageRoomManagementDetailController {
     @FXML
     private GridPane gridPane;
 

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PageRoomManagementEditTypeRoom {
+public class PageRoomManagementEditTypeRoomController {
     @FXML
     private GridPane gridPane;
 
@@ -115,7 +115,7 @@ public class PageRoomManagementEditTypeRoom {
         try {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-            PageRoomManagementInfoTypeRoom controller = loader.getController();
+            PageRoomManagementInfoTypeRoomController controller = loader.getController();
             controller.setData(datasave,msave,dsave);
 
             stage.show();
@@ -139,7 +139,7 @@ public class PageRoomManagementEditTypeRoom {
         try {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-            PageRoomManagementInfoTypeRoom controller = loader.getController();
+            PageRoomManagementInfoTypeRoomController controller = loader.getController();
             controller.setData(datasave,msave,dsave);
 
             stage.show();

@@ -1,6 +1,7 @@
-package Controllers;
+package Models;
 
 
+import Controllers.PageRoomManagementInfoTypeRoomController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,8 +11,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class RoomManagementType {
-    String name,amountD,amountM,fxml;
-    Button detail;
+    private String name,amountD,amountM,fxml;
+    private Button detail;
 
     public RoomManagementType(String name, String amountD, String amountM, Button detail,String fxml) {
         this.name = name;
@@ -31,7 +32,7 @@ public class RoomManagementType {
             try {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-            PageRoomManagementInfoTypeRoom controller = loader.getController();
+            PageRoomManagementInfoTypeRoomController controller = loader.getController();
             controller.setData(getName(),Integer.parseInt(getAmountM()),10);
 
                 stage.show();
