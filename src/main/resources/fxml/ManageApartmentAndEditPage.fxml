@@ -158,12 +158,19 @@
                   </ImageView>
                </graphic>
             </Button>
-            <TextField fx:id="name_apartment" layoutX="303.0" layoutY="266.0" prefHeight="92.0" prefWidth="901.0" promptText="ไม่มี">
-               <font>
-                  <Font size="48.0" />
-               </font>
-            </TextField>
-            <Spinner fx:id="list_day" layoutX="449.0" layoutY="435.0" prefHeight="80.0" prefWidth="108.0" />
+                <TextField fx:id="name_apartment_edit" layoutX="303.0" layoutY="266.0" prefHeight="92.0" prefWidth="901.0" promptText="ไม่มี">
+                    <font>
+                        <Font size="48.0" />
+                    </font>
+                </TextField>
+
+                <Label fx:id="name_apartment" layoutX="304.0" layoutY="262.0" prefHeight="96.0" prefWidth="903.0" text="ไม่มี">
+                    <font>
+                        <Font size="48.0" />
+                    </font>
+                </Label>
+
+                <Spinner fx:id="list_day" layoutX="449.0" layoutY="435.0" prefHeight="80.0" prefWidth="108.0" />
             </children>
         </Pane>
     </children>

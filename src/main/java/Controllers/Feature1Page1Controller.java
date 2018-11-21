@@ -86,7 +86,9 @@ public class Feature1Page1Controller {
     }
 
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
 
     }
 
