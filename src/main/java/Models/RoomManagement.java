@@ -1,4 +1,4 @@
-package Controllers;
+package Models;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class RoomManagement {
-    PageRoomManagementEditTypeRoom pageRoomManagementEditTypeRoom;
+
     String name,type,floor;
     Button detail;
     String fxml;
@@ -34,7 +34,7 @@ public class RoomManagement {
             try {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-//            PageRoomManagementAddNewRoom controller = loader.getController();
+//            PageRoomManagementAddNewRoomController controller = loader.getController();
 //            controller.setData("606");
 
                 stage.show();

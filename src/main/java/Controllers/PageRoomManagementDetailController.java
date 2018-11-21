@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.RoomManagementDetail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,7 +17,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class PageRoomManagementDetail {
+public class PageRoomManagementDetailController {
     @FXML
     private GridPane gridPane;
 
@@ -162,25 +163,32 @@ public class PageRoomManagementDetail {
         gridPane.getChildren().setAll(pane);
     }
 
+    //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
+        gridPane.getChildren().setAll(pane);
+    }
+
+    //ไปหน้าแจ้งชำระจากเมนู
+    @FXML
+    void handleFeature2Btn(ActionEvent event) throws IOException {
 
     }
 
-    @FXML
-    void handleFeature2Btn(ActionEvent event) {
-
-    }
-
+    //ไปหน้าจัดการห้องจากเมนู
     @FXML
     void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
         GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
         gridPane.getChildren().setAll(pane);
 
     }
 
+    //ไปหน้าจัดการหอพักจากเมนู
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
-
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 }

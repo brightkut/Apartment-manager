@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class PageRoomManagementTypeAddNewType {
+public class PageRoomManagementTypeAddNewTypeController {
     @FXML
     private GridPane gridPane;
 
@@ -39,10 +39,10 @@ public class PageRoomManagementTypeAddNewType {
     private TextField tf;
 
     @FXML
-    private Spinner<Integer> spinnerMonth;
+    private Spinner<Double> spinnerMonth;
 
     @FXML
-    private Spinner<Integer> spinnerDay;
+    private Spinner<Double> spinnerDay;
 
     @FXML
     public  void initialize() {
@@ -52,28 +52,26 @@ public class PageRoomManagementTypeAddNewType {
     }
 
     @FXML
-    void setSpinnerMoth(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerMoth(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerMonth.setValueFactory(valueFactory);
         spinnerMonth.setEditable(true);
     }
 
     @FXML
-    void setSpinnerDay(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerDay(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerDay.setValueFactory(valueFactory);
         spinnerDay.setEditable(true);
     }
 
     @FXML
-    void BtnCorrect(ActionEvent event) {
-        System.out.println(tf.getText());
-        System.out.println(spinnerMonth.getValue());
-        System.out.println(spinnerDay.getValue());
-
-
+    void BtnCorrect(ActionEvent event) throws IOException {
         SqlConnection.getSqlConnection().insertTypeRoom(tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
         clear();
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+        gridPane.getChildren().setAll(pane);
+
 
     }
 
@@ -88,28 +86,36 @@ public class PageRoomManagementTypeAddNewType {
     @FXML
     void  clear(){
         tf.setText("");
-        spinnerDay.getValueFactory().setValue(1);
-        spinnerMonth.getValueFactory().setValue(1);
+        spinnerDay.getValueFactory().setValue(1.0);
+        spinnerMonth.getValueFactory().setValue(1.0);
     }
 
+    //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFeature2Btn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFeature4Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 
+    //ไปหน้าแจ้งชำระจากเมนู
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
+    void handleFeature2Btn(ActionEvent event) throws IOException {
 
+    }
+
+    //ไปหน้าจัดการห้องจากเมนู
+    @FXML
+    void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+        gridPane.getChildren().setAll(pane);
+
+    }
+
+    //ไปหน้าจัดการหอพักจากเมนู
+    @FXML
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 }

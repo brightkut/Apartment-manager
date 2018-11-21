@@ -1,5 +1,7 @@
 package Controllers;
 
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +14,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PageRoomManagementInfoTypeRoom {
+public class PageRoomManagementInfoTypeRoomController {
+
+    private TypeRoom tr;
 
     @FXML
     private GridPane gridPane;
@@ -47,16 +51,21 @@ public class PageRoomManagementInfoTypeRoom {
     @FXML
     private Label label_amountM;
 
+
     @FXML
-    void setData(String type,int m,int d){
+    public void setData(String type, Double m, Double d, TypeRoom typeRoom){
         label_type.setText(type);
         label_amountD.setText(""+d);
         label_amountM.setText(""+m);
+        tr = typeRoom;
+
     }
 
     @FXML
-    void BtnDelete(ActionEvent event) {
-
+    void BtnDelete(ActionEvent event) throws IOException {
+        SqlConnection.getSqlConnection().deleteTypeRoom(tr.getIdTypeRoom());
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -72,8 +81,8 @@ public class PageRoomManagementInfoTypeRoom {
         try {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-            PageRoomManagementEditTypeRoom controller = loader.getController();
-            controller.setData(label_type.getText(),Integer.parseInt(label_amountM.getText()),Integer.parseInt(label_amountD.getText()));
+            PageRoomManagementEditTypeRoomController controller = loader.getController();
+            controller.setData(label_type.getText(),Double.parseDouble(label_amountM.getText()),Double.parseDouble(label_amountD.getText()),tr);
 
             stage.show();
 
@@ -88,24 +97,32 @@ public class PageRoomManagementInfoTypeRoom {
         gridPane.getChildren().setAll(pane);
     }
 
+    //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFeature2Btn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleFeature4Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 
+    //ไปหน้าแจ้งชำระจากเมนู
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
+    void handleFeature2Btn(ActionEvent event) throws IOException {
 
+    }
+
+    //ไปหน้าจัดการห้องจากเมนู
+    @FXML
+    void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
+        gridPane.getChildren().setAll(pane);
+
+    }
+
+    //ไปหน้าจัดการหอพักจากเมนู
+    @FXML
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 }

@@ -36,8 +36,7 @@ public class TemplateController {
     //ไปหน้าแจ้งชำระจากเมนู
     @FXML
     void handleFeature2Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/room-main.fxml"));
-        gridPane.getChildren().setAll(pane);
+
     }
 
     //ไปหน้าจัดการห้องจากเมนู
@@ -51,8 +50,9 @@ public class TemplateController {
 
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
-
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
 }
