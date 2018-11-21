@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.SqlConnection;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
@@ -69,6 +70,9 @@ public class PageRoomManagementTypeAddNewTypeController {
         System.out.println(tf.getText());
         System.out.println(spinnerMonth.getValue());
         System.out.println(spinnerDay.getValue());
+
+
+        SqlConnection.getSqlConnection().insertTypeRoom(tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
         clear();
 
     }
