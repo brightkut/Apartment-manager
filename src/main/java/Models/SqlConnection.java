@@ -1,16 +1,33 @@
 package Models;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 //hi
 public class SqlConnection {
+
+    private static SqlConnection sqlConnection =null;
+
+
+
+
+    public static SqlConnection getSqlConnection() {
+        if (sqlConnection ==null){
+            sqlConnection = new SqlConnection();
+        }
+
+        return sqlConnection;
+    }
+
     private static Connection connect() {
-        //check connection is null
-        Connection connection = null;
+        Connection connection =null;
+
         try {
-            Class.forName("org.sqlite.JDBC");
-            String dbURL = "jdbc:sqlite:Apartment.db";
-            connection = DriverManager.getConnection(dbURL);
+            if (connection ==null) {
+                Class.forName("org.sqlite.JDBC");
+                String dbURL = "jdbc:sqlite:Apartment.db";
+                connection = DriverManager.getConnection(dbURL);
+            }
         } catch (ClassNotFoundException e) {
 
             e.printStackTrace();
@@ -21,6 +38,8 @@ public class SqlConnection {
 
         return connection;
     }
+
+
 
     public static boolean checkTableExist(Connection conn, String tableName) throws SQLException {
         boolean tExists = false;
@@ -37,7 +56,7 @@ public class SqlConnection {
     }
 
 
-    public static void createAllTable(){
+    public  void createAllTable(){
         createApartmentTable();
         createDebtTable();
         createReservationTable();
@@ -47,7 +66,7 @@ public class SqlConnection {
 
     }
 
-    public static void createApartmentTable(){
+    public  void createApartmentTable(){
         Connection c = connect();
 
         try {
@@ -61,20 +80,29 @@ public class SqlConnection {
                             ");";
                     Statement s = c.createStatement();
                     s.execute(query);
+                    s.close();
 
+
+                 //   System.out.println("create Apartment table");
+                    String query2 = "Insert into Apartment(name_apartment,date_pay_money,status) values(?,?,?) ";
+                    PreparedStatement test = c.prepareStatement(query2);
+                    test.setString(1,"default_name");
+                    test.setString(2,"1");
+                    test.setString(3,"active");
+                    test.executeUpdate();
+                    test.close();
                     c.close();
-                    System.out.println("create Apartment table");
+
                 }
             }
         } catch (SQLException e) {
 
-            System.out.println(e);
+          //  System.out.println(e);
         }
 
     }
-    public static void createDebtTable(){
+    public  void createDebtTable(){
         Connection c = connect();
-
         try {
             if (!checkTableExist(c,"Debt")) {
                 if (c != null) {
@@ -90,15 +118,15 @@ public class SqlConnection {
                     s.execute(query);
 
                     c.close();
-                    System.out.println("create Debt table");
+                  //  System.out.println("create Debt table");
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+          //  System.out.println(e);
         }
 
     }
-    public static void createReservationTable(){
+    public  void createReservationTable(){
         Connection c = connect();
 
         try {
@@ -119,7 +147,7 @@ public class SqlConnection {
                     s.execute(query);
 
                     c.close();
-                    System.out.println("create Reservation table");
+                   // System.out.println("create Reservation table");
                 }
             }
         } catch (SQLException e) {
@@ -127,9 +155,8 @@ public class SqlConnection {
         }
 
     }
-    public static void createRoomTable(){
+    public  void createRoomTable(){
         Connection c = connect();
-
         try {
             if (!checkTableExist(c,"Room")) {
                 if (c != null) {
@@ -145,17 +172,16 @@ public class SqlConnection {
                     s.execute(query);
 
                     c.close();
-                    System.out.println("create Room table");
+                  //  System.out.println("create Room table");
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+           // System.out.println(e);
         }
 
     }
-    public static void createTypeRoomTable(){
+    public  void createTypeRoomTable(){
         Connection c = connect();
-
         try {
             if (!checkTableExist(c,"TypeRoom")) {
                 if (c != null) {
@@ -164,23 +190,96 @@ public class SqlConnection {
                             "\t`type_room`\tTEXT,\n" +
                             "\t`rent_per_month`\tNUMERIC,\n" +
                             "\t`rent_per_day`\tNUMERIC,\n" +
-                            "\t`status`\tTEXT,\n" +
+                            "\t`status`\tTEXT\n" +
                             ");";
                     Statement s = c.createStatement();
                     s.execute(query);
 
                     c.close();
-                    System.out.println("create TypeRoom table");
+                   // System.out.println("create TypeRoom table");
                 }
             }
         } catch (SQLException e) {
+          //  System.out.println(e);
+        }
+
+    }
+    public  String selectNameOfApartment(){
+        Connection c = connect();
+        String nameApartment ="";
+        try {
+            System.out.println("aa");
+            if (c != null) {
+                String query = "Select name_apartment from Apartment where status = 'active' ";
+                Statement s = c.createStatement();
+
+                ResultSet rs = s.executeQuery(query);
+                nameApartment = rs.getString(1);
+                c.close();
+            }
+        }catch (SQLException e){
+           // System.out.println("eerrrrr");
+            System.out.println(e);
+        }
+        return nameApartment;
+    }
+
+    public  String selectDatePayMoney(){
+        Connection c = connect();
+        String datePayMoney ="";
+        try {
+            if (c != null) {
+                String query = "Select date_pay_money from Apartment where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                datePayMoney = rs.getString(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return datePayMoney;
+
+    }
+
+    public  void updateApartmentNameAndDatePayMoney(String nameApart , String datePay){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update Apartment Set status = ? Where status = ?";
+
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,"unactive");
+                ps.setString(2,"active");
+                ps.executeUpdate();
+                ps.close();
+
+
+                String query2 = "Insert into Apartment(name_apartment,date_pay_money,status) values(?,?,?) ";
+                PreparedStatement s = c.prepareStatement(query2);
+                s.setString(1,nameApart);
+                s.setString(2,datePay);
+                s.setString(3,"active");
+                s.executeUpdate();
+                s.close();
+
+
+                c.close();
+
+
+
+            }
+        }catch (SQLException e){
             System.out.println(e);
         }
 
     }
 
 
-    public static String selectSubjectName(){
+
+
+    public String selectSubjectName(){
         Connection c = connect();
         String subName ="";
         try {
@@ -196,8 +295,46 @@ public class SqlConnection {
         }
 
         return subName;
+    }
+
+    public ArrayList<Reservation> selectRoomThatReservationInRange(LocalDate date_in,LocalDate date_out){
+
+        Connection c = connect();
+        ArrayList<Reservation> r = new ArrayList<>();
+        try {
+            if (c != null) {
+                String query = "Select * from Reservation where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+
+                    String date_check_in_of_database = rs.getString(2);
+                    String date_check_out_of_database = rs.getString(3);
+                    //convert string in database to local date because in database we keep type date in string
+                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
+                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
+                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
+                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+
+                    }
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+
 
     }
+
+
+
+
+
+
 /*
     public static ArrayList<Course> selectRow(){
         Connection c = connect();
