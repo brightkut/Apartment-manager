@@ -39,10 +39,10 @@ public class PageRoomManagementTypeAddNewTypeController {
     private TextField tf;
 
     @FXML
-    private Spinner<Integer> spinnerMonth;
+    private Spinner<Double> spinnerMonth;
 
     @FXML
-    private Spinner<Integer> spinnerDay;
+    private Spinner<Double> spinnerDay;
 
     @FXML
     public  void initialize() {
@@ -52,28 +52,26 @@ public class PageRoomManagementTypeAddNewTypeController {
     }
 
     @FXML
-    void setSpinnerMoth(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerMoth(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerMonth.setValueFactory(valueFactory);
         spinnerMonth.setEditable(true);
     }
 
     @FXML
-    void setSpinnerDay(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerDay(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerDay.setValueFactory(valueFactory);
         spinnerDay.setEditable(true);
     }
 
     @FXML
-    void BtnCorrect(ActionEvent event) {
-        System.out.println(tf.getText());
-        System.out.println(spinnerMonth.getValue());
-        System.out.println(spinnerDay.getValue());
-
-
+    void BtnCorrect(ActionEvent event) throws IOException {
         SqlConnection.getSqlConnection().insertTypeRoom(tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
         clear();
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+        gridPane.getChildren().setAll(pane);
+
 
     }
 
@@ -88,8 +86,8 @@ public class PageRoomManagementTypeAddNewTypeController {
     @FXML
     void  clear(){
         tf.setText("");
-        spinnerDay.getValueFactory().setValue(1);
-        spinnerMonth.getValueFactory().setValue(1);
+        spinnerDay.getValueFactory().setValue(1.0);
+        spinnerMonth.getValueFactory().setValue(1.0);
     }
 
     @FXML

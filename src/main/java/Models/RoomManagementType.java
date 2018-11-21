@@ -13,13 +13,15 @@ import java.io.IOException;
 public class RoomManagementType {
     private String name,amountD,amountM,fxml;
     private Button detail;
+    private TypeRoom typeRoom;
 
-    public RoomManagementType(String name, String amountD, String amountM, Button detail,String fxml) {
+    public RoomManagementType(String name, String amountD, String amountM, Button detail,String fxml,TypeRoom typeRoom) {
         this.name = name;
         this.amountD = amountD;
         this.amountM = amountM;
         this.detail = detail;
         this.fxml = fxml;
+        this.typeRoom = typeRoom;
 
         detail.setOnAction(e -> {
             System.out.println("detail: "+getName());
@@ -33,7 +35,7 @@ public class RoomManagementType {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
             PageRoomManagementInfoTypeRoomController controller = loader.getController();
-            controller.setData(getName(),Integer.parseInt(getAmountM()),10);
+            controller.setData(getName(),Double.parseDouble(getAmountM()),Double.parseDouble(getAmountD()),typeRoom);
 
                 stage.show();
 
@@ -76,5 +78,6 @@ public class RoomManagementType {
     public void setDetail(Button detail) {
         this.detail = detail;
     }
+
 
 }
