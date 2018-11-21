@@ -330,6 +330,128 @@ public class SqlConnection {
 
     }
 
+    public void insertRoom(String room_name , String type_room ,int floor){
+        Connection c = connect();
+        String subName ="";
+        try {
+            if (c != null) {
+                String query = "Select * from Room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+                    if (rs.first()){
+                        String query2 = "Insert into Room(";
+
+                                 PreparedStatement st = c.prepareStatement(query2);
+                        st.setString(1,"t");
+
+                        st.executeUpdate();
+                        st.close();
+
+                    }
+                }
+
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+    }
+
+    public boolean checkThisTypeRoomIsAlreadyExist(String typeRoom){
+        Connection c = connect();
+        try {
+            if (c != null) {
+                String query = "Select type_room from TypeRoom";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+                    if (rs.getString(1).equals(typeRoom)){
+                    return true;
+                    }
+                }
+                c.close();
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return false;
+
+    }
+
+    public void insertTypeRoom(String typeRoom ,double rentPerMonth,double rentPerDay){
+        Connection c = connect();
+
+        int count =0;
+        try {
+            if (c != null) {
+                String query = "Select count(id_type_room)  from TypeRoom";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+                    count = rs.getInt(1);
+                }
+
+                if (count==0){
+                    String query2 ="Insert into TypeRoom(type_room,rent_per_month,rent_per_day,status) values(?,?,?,?)";
+                    PreparedStatement p = c.prepareStatement(query2);
+                    p.setString(1,typeRoom);
+                    p.setDouble(2,rentPerMonth);
+                    p.setDouble(3,rentPerDay);
+                    p.setString(4,"active");
+                    p.executeUpdate();
+                }else {
+
+                    if (checkThisTypeRoomIsAlreadyExist(typeRoom)){
+                        System.out.println("error this type room already exist");
+                    }else {
+                        String query2 ="Insert into TypeRoom(type_room,rent_per_month,rent_per_day,status) values(?,?,?,?)";
+                        PreparedStatement p = c.prepareStatement(query2);
+                        p.setString(1,typeRoom);
+                        p.setDouble(2,rentPerMonth);
+                        p.setDouble(3,rentPerDay);
+                        p.setString(4,"active");
+                        p.executeUpdate();
+
+                    }
+
+                }
+                c.close();
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+    }
+
+
+    public ArrayList<TypeRoom> selectAllTypeRoom(){
+
+        Connection c = connect();
+        ArrayList<TypeRoom> r = new ArrayList<>();
+        try {
+            if (c != null) {
+                String query = "Select * from TypeRoom where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+
+                    r.add(new TypeRoom(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getString(5)));
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+
+
+    }
 
 
 
