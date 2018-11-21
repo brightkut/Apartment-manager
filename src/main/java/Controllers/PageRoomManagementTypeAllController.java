@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.RoomManagementType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,12 +13,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class PageRoomManagementTypeAll {
+public class PageRoomManagementTypeAllController {
     @FXML
     private GridPane gridPane;
 

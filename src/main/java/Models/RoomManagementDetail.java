@@ -1,4 +1,4 @@
-package Controllers;
+package Models;
 
 
 import javafx.scene.control.Button;

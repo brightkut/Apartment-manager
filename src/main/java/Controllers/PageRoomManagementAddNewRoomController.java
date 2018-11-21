@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class PageRoomManagementAddNewRoom {
+public class PageRoomManagementAddNewRoomController {
 
     @FXML
     private TextField tf;

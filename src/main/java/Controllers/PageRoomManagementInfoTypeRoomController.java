@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PageRoomManagementInfoTypeRoom {
+public class PageRoomManagementInfoTypeRoomController {
 
     @FXML
     private GridPane gridPane;
@@ -48,7 +48,7 @@ public class PageRoomManagementInfoTypeRoom {
     private Label label_amountM;
 
     @FXML
-    void setData(String type,int m,int d){
+    public void setData(String type, int m, int d){
         label_type.setText(type);
         label_amountD.setText(""+d);
         label_amountM.setText(""+m);
@@ -72,7 +72,7 @@ public class PageRoomManagementInfoTypeRoom {
         try {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-            PageRoomManagementEditTypeRoom controller = loader.getController();
+            PageRoomManagementEditTypeRoomController controller = loader.getController();
             controller.setData(label_type.getText(),Integer.parseInt(label_amountM.getText()),Integer.parseInt(label_amountD.getText()));
 
             stage.show();

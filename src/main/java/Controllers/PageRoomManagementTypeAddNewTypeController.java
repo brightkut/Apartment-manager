@@ -12,7 +12,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 
-public class PageRoomManagementTypeAddNewType {
+public class PageRoomManagementTypeAddNewTypeController {
     @FXML
     private GridPane gridPane;
 
