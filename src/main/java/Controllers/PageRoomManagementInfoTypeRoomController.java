@@ -1,5 +1,7 @@
 package Controllers;
 
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class PageRoomManagementInfoTypeRoomController {
+
+    private TypeRoom tr;
 
     @FXML
     private GridPane gridPane;
@@ -47,16 +51,21 @@ public class PageRoomManagementInfoTypeRoomController {
     @FXML
     private Label label_amountM;
 
+
     @FXML
-    public void setData(String type, int m, int d){
+    public void setData(String type, Double m, Double d, TypeRoom typeRoom){
         label_type.setText(type);
         label_amountD.setText(""+d);
         label_amountM.setText(""+m);
+        tr = typeRoom;
+
     }
 
     @FXML
-    void BtnDelete(ActionEvent event) {
-
+    void BtnDelete(ActionEvent event) throws IOException {
+        SqlConnection.getSqlConnection().deleteTypeRoom(tr.getIdTypeRoom());
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
     @FXML
@@ -73,7 +82,7 @@ public class PageRoomManagementInfoTypeRoomController {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
             PageRoomManagementEditTypeRoomController controller = loader.getController();
-            controller.setData(label_type.getText(),Integer.parseInt(label_amountM.getText()),Integer.parseInt(label_amountD.getText()));
+            controller.setData(label_type.getText(),Double.parseDouble(label_amountM.getText()),Double.parseDouble(label_amountD.getText()),tr);
 
             stage.show();
 

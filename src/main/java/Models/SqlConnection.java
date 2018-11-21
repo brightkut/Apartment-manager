@@ -448,9 +448,54 @@ public class SqlConnection {
         }
 
         return r;
+    }
+
+    public void updateTypeRoom(int idTypeRoom ,String name ,Double month ,Double day){
+
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update TypeRoom Set type_room = ? , rent_per_month = ? , rent_per_day = ? Where id_type_room = ?";
+
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,name);
+                ps.setDouble(2,month);
+                ps.setDouble(3,day);
+                ps.setInt(4,idTypeRoom);
+                ps.executeUpdate();
+                ps.close();
+
+                c.close();
 
 
 
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    public void deleteTypeRoom(int idTypeRoom ){
+
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update TypeRoom Set status = ? Where id_type_room = ?";
+
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,"unactive");
+               ps.setInt(2,idTypeRoom);
+                ps.executeUpdate();
+                ps.close();
+                c.close();
+
+
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
     }
 
 

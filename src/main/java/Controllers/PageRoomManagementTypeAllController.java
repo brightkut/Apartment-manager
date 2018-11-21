@@ -1,6 +1,8 @@
 package Controllers;
 
 import Models.RoomManagementType;
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PageRoomManagementTypeAllController {
     @FXML
@@ -105,8 +108,9 @@ public class PageRoomManagementTypeAllController {
     private void loadData(){
         ObservableList<RoomManagementType> data_table = FXCollections.observableArrayList();
         String fxml = "/fxml/PageRoomManagementInfoTypeRoom.fxml" ;
-        for(int i=0 ; i<7 ; i++){
-            data_table.add(new RoomManagementType("name"+i,""+(i+1),""+(i+1),new Button("รายละเอียด"),fxml));
+        ArrayList<TypeRoom> typeRooms = SqlConnection.getSqlConnection().selectAllTypeRoom();
+        for(int i=0 ; i<typeRooms.size() ; i++){
+            data_table.add(new RoomManagementType(typeRooms.get(i).getTypeRoom(),typeRooms.get(i).getRentPerDay()+"",typeRooms.get(i).getRentPerMonth()+"",new Button("รายละเอียด"),fxml,typeRooms.get(i)));
         }
 
         table_typeAll.setItems(data_table);
