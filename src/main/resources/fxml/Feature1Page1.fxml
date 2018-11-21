@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Feature1Page1Controller">
+<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Feature1Page1Controller">
     <children>
         <Pane prefHeight="800.0" prefWidth="1280.0">
             <children>
@@ -36,7 +36,7 @@
                             <graphic>
                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../images/searchIcon.png" />
+                                        <Image url="@../images/search-icon.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -48,7 +48,7 @@
                             <graphic>
                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../images/notificationIcon.png" />
+                                        <Image url="@../images/notification-icon.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -60,7 +60,7 @@
                             <graphic>
                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../images/calendarIcon.png" />
+                                        <Image url="@../images/calendar-icon.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -72,7 +72,7 @@
                             <graphic>
                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../images/roomIcon.png" />
+                                        <Image url="@../images/room-icon.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -84,7 +84,7 @@
                             <graphic>
                                 <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../images/buildingIcon.png" />
+                                        <Image url="@../images/building-icon.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -98,7 +98,7 @@
                <graphic>
                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/searchIcon.png" />
+                        <Image url="@../images/search-icon.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -125,7 +125,7 @@
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/searchIcon.png" />
+                        <Image url="@../images/search-icon.png" />
                      </image>
                   </ImageView>
                </graphic>
