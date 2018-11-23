@@ -1,4 +1,5 @@
 package Controllers;
+import Models.SqlConnection;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class PageRoomManagementAddNewRoomController {
 
@@ -76,11 +78,17 @@ public class PageRoomManagementAddNewRoomController {
 
     @FXML
     void BtnCorrect(ActionEvent event) {
-        System.out.println(tf.getText());
-        System.out.println(cb.getValue());
-        System.out.println(spinner.getValue());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การเพิ่มห้องใหม่");
+        alert.setHeaderText("คอนเฟิร์ม การเพิ่มห้อง");
+        alert.setContentText("คุณแน่ใจที่จะเพิ่ม ห้อง: "+tf.getText()+" ประเถทห้อง: "+cb.getValue()+" ชั้น: "+spinner.getValue()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
 
-        clear();
+        if (action.get() == ButtonType.OK){
+            //update data to database
+            System.out.println("clear");
+        }
+
     }
 
     @FXML
@@ -115,7 +123,7 @@ public class PageRoomManagementAddNewRoomController {
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
     void handleFeature5Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 

@@ -35,7 +35,7 @@ public class RoomManagement {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
             PageRoomManagementDetailController controller = loader.getController();
-            controller.setData(getName(),getType(),Double.parseDouble(getFloor()));
+            controller.setData(getName(),getType(),Integer.parseInt(getFloor()));
 
                 stage.show();
 
