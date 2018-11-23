@@ -1,5 +1,6 @@
 package Models;
 
+import Controllers.PageRoomManagementDetailController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,7 +25,6 @@ public class RoomManagement {
 
 
         detail.setOnAction(e -> {
-            System.out.println("detail: "+getName());
 
             Button b = (Button) e.getSource();
 
@@ -34,8 +34,8 @@ public class RoomManagement {
             try {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-//            PageRoomManagementAddNewRoomController controller = loader.getController();
-//            controller.setData("606");
+            PageRoomManagementDetailController controller = loader.getController();
+            controller.setData(getName(),getType(),Double.parseDouble(getFloor()));
 
                 stage.show();
 
