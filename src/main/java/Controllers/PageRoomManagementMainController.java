@@ -114,7 +114,7 @@ public class PageRoomManagementMainController {
         ObservableList<RoomManagement> data_table = FXCollections.observableArrayList();
         String fxml = "/fxml/PageRoomManagementDetail.fxml" ;
         for(int i=0 ; i<7 ; i++){
-            data_table.add(new RoomManagement("name"+i, "type"+i,"floor"+i,new Button("รายละเอียด"),fxml));
+            data_table.add(new RoomManagement("name"+i, "type"+i,""+(i+1),new Button("รายละเอียด"),fxml));
         }
 
         table_info.setItems(data_table);

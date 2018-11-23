@@ -8,9 +8,7 @@ import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -20,6 +18,32 @@ import java.io.IOException;
 public class PageRoomManagementDetailController {
     @FXML
     private GridPane gridPane;
+
+    @FXML
+    private TextField textF_name;
+
+    @FXML
+    private TextField textF_type;
+
+    @FXML
+    private Spinner<Double> spinner_floor;
+
+//label
+    @FXML
+    private Label label_nameroom;
+
+    @FXML
+    private Label label_typeroom;
+
+    @FXML
+    private Label label_floor;
+
+//btn
+    @FXML
+    private Button btnX;
+
+    @FXML
+    private Button btnY;
 
     @FXML
     private Button feature1Btn;
@@ -66,11 +90,45 @@ public class PageRoomManagementDetailController {
 
     @FXML
     public  void initialize() throws IOException {
+
+        setVisible();
+
+        setSpinner_floor(1,100);
         initTable();
         setStyleCols();
         loadData();
     }
 
+
+    @FXML
+    public void setData(String textF,String textT,Double s){
+        label_nameroom.setText(textF);
+        label_typeroom.setText(textT);
+        label_floor.setText(""+s);
+    }
+
+    @FXML
+    public void setVisible(){
+        btnX.setVisible(false);
+        btnY.setVisible(false);
+        textF_name.setVisible(false);
+        textF_type.setVisible(false);
+        spinner_floor.setVisible(false);
+    }
+
+    @FXML
+    public void setEditDetail(String textF,String textT,Double s){
+        textF_name.setText(textF);
+        textF_type.setText(textT);
+        spinner_floor.getValueFactory().setValue(s);
+
+    }
+    @FXML
+    void setSpinner_floor(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
+        spinner_floor.setValueFactory(valueFactory);
+        spinner_floor.setEditable(false);
+    }
 
 
 
@@ -154,6 +212,27 @@ public class PageRoomManagementDetailController {
 
     @FXML
     void BtnEdit(ActionEvent event) {
+        btnX.setVisible(true);
+        btnY.setVisible(true);
+        textF_name.setVisible(true);
+        textF_type.setVisible(true);
+        spinner_floor.setVisible(true);
+        btnEdit.setVisible(false);
+        setEditDetail(label_nameroom.getText(),label_typeroom.getText(),Double.parseDouble(label_floor.getText()));
+    }
+
+    @FXML
+    void BtnX(ActionEvent event) {
+        btnX.setVisible(false);
+        btnY.setVisible(false);
+        btnEdit.setVisible(true);
+        textF_name.setVisible(false);
+        textF_type.setVisible(false);
+        spinner_floor.setVisible(false);
+    }
+
+    @FXML
+    void BtnY(ActionEvent event) {
 
     }
 

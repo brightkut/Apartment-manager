@@ -24,8 +24,6 @@ public class RoomManagementType {
         this.typeRoom = typeRoom;
 
         detail.setOnAction(e -> {
-            System.out.println("detail: "+getName());
-
             Button b = (Button) e.getSource();
 
             Stage stage = (Stage) b.getScene().getWindow();

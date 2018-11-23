@@ -34,7 +34,7 @@
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/searchIcon.png" />
+                              <Image url="@../images/search-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -46,7 +46,7 @@
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/notificationIcon.png" />
+                              <Image url="@../images/notification-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -58,7 +58,7 @@
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/calendarIcon.png" />
+                              <Image url="@../images/calendar-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -70,7 +70,7 @@
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/roomIcon.png" />
+                              <Image url="@../images/room-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -82,7 +82,7 @@
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/buildingIcon.png" />
+                              <Image url="@../images/building-icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
