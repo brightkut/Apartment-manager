@@ -656,20 +656,23 @@ public class SqlConnection {
         ArrayList<Reservation> r = new ArrayList<>();
         try {
             if (c != null) {
+
+
                 String query = "Select * from Reservation where status = 'active'";
                 Statement s = c.createStatement();
                 ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
+                while (rs.next()) {
 
                     String date_check_in_of_database = rs.getString(2);
                     String date_check_out_of_database = rs.getString(3);
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
-                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                    if (ld1.compareTo(date_in) >= 0 && ld2.compareTo(date_out) <= 0) {
+                        r.add(new Reservation(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
                     }
                 }
+
                 c.close();
             }
         }catch (SQLException e){
@@ -679,7 +682,9 @@ public class SqlConnection {
         return r;
 
     }
-    
+
+
+
 
 
 
