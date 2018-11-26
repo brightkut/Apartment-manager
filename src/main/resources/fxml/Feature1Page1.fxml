@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Feature1Page1Controller">
+<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Feature1Page1Controller">
     <children>
         <Pane prefHeight="800.0" prefWidth="1280.0">
             <children>
@@ -121,7 +121,7 @@
             <DatePicker fx:id="toDatePicker" disable="true" layoutX="460.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" visible="false" />
             <ComboBox fx:id="roomTypeBox" layoutX="681.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" promptText="ทุกประเภท" />
             <ComboBox fx:id="floorBox" layoutX="890.0" layoutY="302.0" prefHeight="50.0" prefWidth="100.0" promptText="ทุกชั้น" />
-            <Button fx:id="searchBtn" layoutX="1011.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSeachBtn" prefHeight="75.0" prefWidth="190.0" text=" ค้นหาเลย">
+            <Button fx:id="searchBtn" layoutX="1011.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="75.0" prefWidth="190.0" text=" ค้นหาเลย">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -153,7 +153,7 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <TableView fx:id="tableView" layoutX="250.0" layoutY="380.0" prefHeight="380.0" prefWidth="950.0">
+            <TableView fx:id="tableView" layoutX="250.0" layoutY="380.0" prefHeight="380.0" prefWidth="950.0" stylesheets="@../css/tableview.css">
               <columns>
                 <TableColumn fx:id="roomNameCol" editable="false" minWidth="50.0" prefWidth="275.0" text="ชื่อห้อง" />
                 <TableColumn fx:id="roomTypeCol" editable="false" minWidth="50.0" prefWidth="200.0" text="ประเภท" />
