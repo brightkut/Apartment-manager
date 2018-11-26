@@ -160,7 +160,7 @@ public class PageRoomManagementTypeAllController {
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
     void handleFeature5Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/MananageApartmentAndEditPage.fxml"));
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 

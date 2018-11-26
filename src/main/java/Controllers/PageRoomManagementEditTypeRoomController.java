@@ -8,14 +8,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class PageRoomManagementEditTypeRoomController {
 
@@ -103,10 +101,18 @@ public class PageRoomManagementEditTypeRoomController {
 
     @FXML
     void BtnCorrect(ActionEvent event) throws IOException {
-        SqlConnection.getSqlConnection().updateTypeRoom(tr.getIdTypeRoom(),tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
-        gridPane.getChildren().setAll(pane);
-        clear();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การแก้ไขประภทห้อง");
+        alert.setHeaderText("คอนเฟิร์ม การแก้ไข");
+        alert.setContentText("คุณแน่ใจที่จะแก้ไข ประเภทห้อง: "+tf.getText()+" รายวัน: "+spinnerDay.getValue()+" รายเดือน: "+spinnerMonth.getValue()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
+
+        if (action.get() == ButtonType.OK){
+            SqlConnection.getSqlConnection().updateTypeRoom(tr.getIdTypeRoom(),tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
+            GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+            gridPane.getChildren().setAll(pane);
+            clear();
+        }
 
     }
 
@@ -183,7 +189,7 @@ public class PageRoomManagementEditTypeRoomController {
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
     void handleFeature5Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 

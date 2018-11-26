@@ -1,6 +1,7 @@
 package Controllers;
 
 import Models.RoomManagementDetail;
+import Models.SqlConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class PageRoomManagementDetailController {
     @FXML
@@ -26,7 +28,7 @@ public class PageRoomManagementDetailController {
     private TextField textF_type;
 
     @FXML
-    private Spinner<Double> spinner_floor;
+    private Spinner<Integer> spinner_floor;
 
 //label
     @FXML
@@ -101,7 +103,7 @@ public class PageRoomManagementDetailController {
 
 
     @FXML
-    public void setData(String textF,String textT,Double s){
+    public void setData(String textF,String textT,int s){
         label_nameroom.setText(textF);
         label_typeroom.setText(textT);
         label_floor.setText(""+s);
@@ -117,15 +119,15 @@ public class PageRoomManagementDetailController {
     }
 
     @FXML
-    public void setEditDetail(String textF,String textT,Double s){
+    public void setEditDetail(String textF,String textT,int s){
         textF_name.setText(textF);
         textF_type.setText(textT);
         spinner_floor.getValueFactory().setValue(s);
 
     }
     @FXML
-    void setSpinner_floor(double min,double max){
-        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
+    void setSpinner_floor(int min,int max){
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
         spinner_floor.setValueFactory(valueFactory);
         spinner_floor.setEditable(false);
     }
@@ -207,6 +209,15 @@ public class PageRoomManagementDetailController {
 
     @FXML
     void BtnDelete(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การลบห้อง");
+        alert.setHeaderText("คอนเฟิร์ม การลบ");
+        alert.setContentText("คุณแน่ใจที่จะลบ ห้อง: "+label_nameroom.getText()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
+
+        if (action.get() == ButtonType.OK){
+            System.out.println("delete");
+        }
 
     }
 
@@ -218,7 +229,7 @@ public class PageRoomManagementDetailController {
         textF_type.setVisible(true);
         spinner_floor.setVisible(true);
         btnEdit.setVisible(false);
-        setEditDetail(label_nameroom.getText(),label_typeroom.getText(),Double.parseDouble(label_floor.getText()));
+        setEditDetail(label_nameroom.getText(),label_typeroom.getText(),Integer.parseInt(label_floor.getText()));
     }
 
     @FXML
@@ -233,7 +244,15 @@ public class PageRoomManagementDetailController {
 
     @FXML
     void BtnY(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การแก้ไขห้อง");
+        alert.setHeaderText("คอนเฟิร์ม การแก้ไข");
+        alert.setContentText("คุณแน่ใจที่จะแก้ไข ห้อง: "+label_nameroom.getText()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
 
+        if (action.get() == ButtonType.OK){
+            System.out.println("edit");
+        }
     }
 
     @FXML
@@ -267,7 +286,7 @@ public class PageRoomManagementDetailController {
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
     void handleFeature5Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 }

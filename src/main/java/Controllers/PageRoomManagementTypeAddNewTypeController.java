@@ -5,13 +5,11 @@ import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class PageRoomManagementTypeAddNewTypeController {
     @FXML
@@ -67,10 +65,18 @@ public class PageRoomManagementTypeAddNewTypeController {
 
     @FXML
     void BtnCorrect(ActionEvent event) throws IOException {
-        SqlConnection.getSqlConnection().insertTypeRoom(tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
-        clear();
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
-        gridPane.getChildren().setAll(pane);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การเพิ่มประเภทห้อง");
+        alert.setHeaderText("คอนเฟิร์ม การเพิ่ม");
+        alert.setContentText("คุณแน่ใจที่จะเพิ่ม ประเภทห้อง: "+tf.getText()+" รายวัน: "+spinnerDay.getValue()+" รายเดือน: "+spinnerMonth.getValue()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
+
+        if (action.get() == ButtonType.OK){
+            SqlConnection.getSqlConnection().insertTypeRoom(tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
+            clear();
+            GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+            gridPane.getChildren().setAll(pane);
+        }
 
 
     }
@@ -115,7 +121,7 @@ public class PageRoomManagementTypeAddNewTypeController {
     //ไปหน้าจัดการหอพักจากเมนู
     @FXML
     void handleFeature5Btn(ActionEvent event) throws IOException {
-        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManangeApartmentAndEditPage.fxml"));
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
         gridPane.getChildren().setAll(pane);
     }
 }
