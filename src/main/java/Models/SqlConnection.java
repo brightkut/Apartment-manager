@@ -300,34 +300,7 @@ public class SqlConnection {
 
 
 
-    public void insertRoom(String room_name , String type_room ,int floor){
-        Connection c = connect();
-        String subName ="";
-        try {
-            if (c != null) {
-                String query = "Select * from Room";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
-                    if (rs.first()){
-                        String query2 = "Insert into Room(";
 
-                                 PreparedStatement st = c.prepareStatement(query2);
-                        st.setString(1,"t");
-
-                        st.executeUpdate();
-                        st.close();
-
-                    }
-                }
-
-                c.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e);
-        }
-
-    }
 
     public boolean checkThisTypeRoomIsAlreadyExist(String typeRoom){
         Connection c = connect();
@@ -477,7 +450,7 @@ public class SqlConnection {
 
         try {
             if (c != null) {
-                String query = "Update TypeRoom Set status = ? Where id_type_room = ?";
+                String query = "Update TypeRoom Set status = ? Where id_type_room = ";
 
                 PreparedStatement ps = c.prepareStatement(query);
                 ps.setString(1,"unactive");
@@ -537,6 +510,67 @@ public class SqlConnection {
         }
     }
 
+    public String getTypeRoomFromIDRoom(int id){
+
+        Connection c = connect();
+        String subName ="";
+        try {
+            if (c != null) {
+                String query = "Select type_room from TypeRoom where id_type_room = '"+Integer.toString(id)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                subName = rs.getString(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return subName;
+
+    }
+    public int getIDroomByNameRoom(String n){
+
+        Connection c = connect();
+      int subName =0;
+        try {
+            if (c != null) {
+                String query = "Select id_room from Room where room_name = '"+n+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                subName = rs.getInt(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return subName;
+
+    }
+
+    public int getIDTyperoomFromNameTypeRoom(String n){
+        Connection c = connect();
+        int subName =0;
+        try {
+            if (c != null) {
+                String query = "Select id_type_room from TypeRoom where type_room = '"+n+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                subName = rs.getInt(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return subName;
+
+    }
+
     //ลบห้องพัก
     public void deleteRoom(int idRoom ){
 
@@ -585,13 +619,25 @@ public class SqlConnection {
         ArrayList<Room> r = new ArrayList<>();
         try {
             if (c != null) {
-                String query = "Select * from Room where status = 'active'";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
-
-                    r.add(new Room(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getString(5)));
+                int count =0;
+                String query2 = "Select count(id_room)  from Room";
+                Statement s2 = c.createStatement();
+                ResultSet rs2 = s2.executeQuery(query2);
+                while (rs2.next()){
+                    count = rs2.getInt(1);
                 }
+                if (count==0) {
+                    System.out.println("no room");
+                }
+                else {
+                    String query = "Select * from Room where status ='active'";
+                    Statement s = c.createStatement();
+                    ResultSet rs = s.executeQuery(query);
+                    while (rs.next()) {
+                        r.add(new Room(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getString(5)));
+                    }
+                }
+
                 c.close();
             }
         }catch (SQLException e){
@@ -610,20 +656,23 @@ public class SqlConnection {
         ArrayList<Reservation> r = new ArrayList<>();
         try {
             if (c != null) {
+
+
                 String query = "Select * from Reservation where status = 'active'";
                 Statement s = c.createStatement();
                 ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
+                while (rs.next()) {
 
                     String date_check_in_of_database = rs.getString(2);
                     String date_check_out_of_database = rs.getString(3);
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
-                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                    if (ld1.compareTo(date_in) >= 0 && ld2.compareTo(date_out) <= 0) {
+                        r.add(new Reservation(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
                     }
                 }
+
                 c.close();
             }
         }catch (SQLException e){
@@ -633,7 +682,9 @@ public class SqlConnection {
         return r;
 
     }
-    
+
+
+
 
 
 

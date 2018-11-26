@@ -1,7 +1,17 @@
 package Models;
 
 
+import Controllers.PageRoomManagementDetailController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Optional;
 
 public class RoomManagementDetail {
     String date_star, date_end,type,user,phone;
@@ -16,6 +26,39 @@ public class RoomManagementDetail {
         this.phone = phone;
         this.cancel = cancel;
         this.fxml = fxml;
+
+
+       cancel.setOnAction(e -> {
+           Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("คอนเฟิร์ม การยกเบิกการจอง");
+           alert.setHeaderText("คอนเฟิร์ม การยกเลิก");
+           alert.setContentText("คุณแน่ใจที่จะยกเลิกการจองของ ผู้พัก: "+getUser()+" ?");
+           Optional<ButtonType> action = alert.showAndWait();
+
+           if (action.get() == ButtonType.OK){
+               System.out.println("cancel");
+//               Button b = (Button) e.getSource();
+//
+//               Stage stage = (Stage) b.getScene().getWindow();
+//
+//               FXMLLoader loader = new FXMLLoader(getClass().getResource(this.fxml));
+//               try {
+//                   stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
+//
+////                PageRoomManagementDetailController controller = loader.getController();
+////                controller.setData(getName(),getType(),Integer.parseInt(getFloor()));
+//
+//                   stage.show();
+//
+//               } catch (IOException e1) {
+//                   e1.printStackTrace();
+//               }
+           }
+
+
+
+
+        });
     }
 
     public String getDate_star() {

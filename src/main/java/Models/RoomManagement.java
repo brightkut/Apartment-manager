@@ -1,5 +1,6 @@
 package Models;
 
+import Controllers.PageRoomManagementDetailController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,17 +15,18 @@ public class RoomManagement {
     String name,type,floor;
     Button detail;
     String fxml;
+    Room room;
 
-    public RoomManagement(String name, String type, String floor, Button detail,String fxml) {
+    public RoomManagement(String name, String type, String floor, Button detail,String fxml,Room room) {
         this.name = name;
         this.type = type;
         this.floor = floor;
         this.detail = detail;
         this.fxml = fxml;
+        this.room = room;
 
 
         detail.setOnAction(e -> {
-            System.out.println("detail: "+getName());
 
             Button b = (Button) e.getSource();
 
@@ -34,8 +36,8 @@ public class RoomManagement {
             try {
                 stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
-//            PageRoomManagementAddNewRoomController controller = loader.getController();
-//            controller.setData("606");
+            PageRoomManagementDetailController controller = loader.getController();
+            controller.setData(getName(),getType(),Integer.parseInt(getFloor()));
 
                 stage.show();
 
@@ -49,8 +51,21 @@ public class RoomManagement {
     }
 
 
+    public String getFxml() {
+        return fxml;
+    }
 
+    public void setFxml(String fxml) {
+        this.fxml = fxml;
+    }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 
     public String getName() {
         return name;
