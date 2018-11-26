@@ -10,6 +10,7 @@ public class SqlConnection {
 
 
 
+    private SqlConnection(){};
 
     public static SqlConnection getSqlConnection() {
         if (sqlConnection ==null){
@@ -297,38 +298,7 @@ public class SqlConnection {
         return subName;
     }
 
-    public ArrayList<Reservation> selectRoomThatReservationInRange(LocalDate date_in,LocalDate date_out){
 
-        Connection c = connect();
-        ArrayList<Reservation> r = new ArrayList<>();
-        try {
-            if (c != null) {
-                String query = "Select * from Reservation where status = 'active'";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
-
-                    String date_check_in_of_database = rs.getString(2);
-                    String date_check_out_of_database = rs.getString(3);
-                    //convert string in database to local date because in database we keep type date in string
-                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
-                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
-                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
-
-                    }
-                }
-                c.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e);
-        }
-
-        return r;
-
-
-
-    }
 
     public void insertRoom(String room_name , String type_room ,int floor){
         Connection c = connect();
@@ -381,6 +351,29 @@ public class SqlConnection {
 
     }
 
+    public boolean checkThisRoomIsAlreadyExist(String nameRoom){
+        Connection c = connect();
+        try {
+            if (c != null) {
+                String query = "Select room_name from Room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+                    if (rs.getString(1).equals(nameRoom)){
+                        return true;
+                    }
+                }
+                c.close();
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return false;
+
+    }
+
+    //เพิ่มชนิดห้องพัก
     public void insertTypeRoom(String typeRoom ,double rentPerMonth,double rentPerDay){
         Connection c = connect();
 
@@ -428,6 +421,7 @@ public class SqlConnection {
     }
 
 
+       //แสดงชนิดห้องพักทั้งหมด
     public ArrayList<TypeRoom> selectAllTypeRoom(){
 
         Connection c = connect();
@@ -450,6 +444,7 @@ public class SqlConnection {
         return r;
     }
 
+    // แก้ไขชนิดห้องพัก
     public void updateTypeRoom(int idTypeRoom ,String name ,Double month ,Double day){
 
         Connection c = connect();
@@ -457,7 +452,6 @@ public class SqlConnection {
         try {
             if (c != null) {
                 String query = "Update TypeRoom Set type_room = ? , rent_per_month = ? , rent_per_day = ? Where id_type_room = ?";
-
                 PreparedStatement ps = c.prepareStatement(query);
                 ps.setString(1,name);
                 ps.setDouble(2,month);
@@ -475,6 +469,8 @@ public class SqlConnection {
             System.out.println(e);
         }
     }
+
+    //ลบชนิดห้องพัก
     public void deleteTypeRoom(int idTypeRoom ){
 
         Connection c = connect();
@@ -497,6 +493,148 @@ public class SqlConnection {
             System.out.println(e);
         }
     }
+
+    //เพิ่มห้องพัก
+    public void insertRoom(String nameRoom,int id_type_Room,int floor){
+        Connection c = connect();
+        int count =0;
+        try {
+            if (c != null) {
+                String query = "Select count(id_room)  from Room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+                    count = rs.getInt(1);
+                }
+
+                if (count==0){
+                    String query2 ="Insert into Room(room_name,id_type_room,floor,status) values(?,?,?,?)";
+                    PreparedStatement p = c.prepareStatement(query2);
+                    p.setString(1,nameRoom);
+                    p.setInt(2,id_type_Room);
+                    p.setInt(3,floor);
+                    p.setString(4,"active");
+                    p.executeUpdate();
+                }else {
+
+                    if (checkThisRoomIsAlreadyExist(nameRoom)){
+                        System.out.println("error this name room already exist");
+                    }else {
+                        String query2 ="Insert into Room(room_name,id_type_room,floor,status) values(?,?,?,?)";
+                        PreparedStatement p = c.prepareStatement(query2);
+                        p.setString(1,nameRoom);
+                        p.setInt(2,id_type_Room);
+                        p.setInt(3,floor);
+                        p.setString(4,"active");
+                        p.executeUpdate();
+                    }
+                }
+                c.close();
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+
+    //ลบห้องพัก
+    public void deleteRoom(int idRoom ){
+
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update Room Set status = ? Where id_room = ?";
+
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,"unactive");
+                ps.setInt(2,idRoom);
+                ps.executeUpdate();
+                ps.close();
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+    //แก้ไขห้องพัก
+    public void updateRoom(int id_room,String nameRoom,int floor,int idTypeRoom){
+
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update Room Set room_name = ? , floor = ? , id_type_room = ? Where id_room = ?";
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,nameRoom);
+                ps.setInt(2,floor);
+                ps.setInt(3,idTypeRoom);
+                ps.setInt(4,id_room);
+                ps.executeUpdate();
+                ps.close();
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+
+    //แสดงห้องพัก
+    public ArrayList<Room>selectAllRoom(){
+        Connection c = connect();
+        ArrayList<Room> r = new ArrayList<>();
+        try {
+            if (c != null) {
+                String query = "Select * from Room where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+
+                    r.add(new Room(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getString(5)));
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+
+    }
+
+
+    public ArrayList<Reservation> selectRoomThatReservationInRange(LocalDate date_in,LocalDate date_out){
+
+        Connection c = connect();
+        ArrayList<Reservation> r = new ArrayList<>();
+        try {
+            if (c != null) {
+                String query = "Select * from Reservation where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                while (rs.next()){
+
+                    String date_check_in_of_database = rs.getString(2);
+                    String date_check_out_of_database = rs.getString(3);
+                    //convert string in database to local date because in database we keep type date in string
+                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
+                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
+                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
+                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                    }
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+    
+
 
 
 
