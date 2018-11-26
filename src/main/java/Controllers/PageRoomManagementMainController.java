@@ -118,7 +118,7 @@ public class PageRoomManagementMainController {
         String fxml = "/fxml/PageRoomManagementDetail.fxml" ;
         ArrayList<Room> rooms = SqlConnection.getSqlConnection().selectAllRoom();
         for(int i=0 ; i<rooms.size() ; i++){
-            data_table.add(new RoomManagement(rooms.get(i).getRoom_name(), rooms.get(i).getId_type_room()+"",rooms.get(i).getFloor()+"",new Button("รายละเอียด"),fxml,rooms.get(i)));
+            data_table.add(new RoomManagement(rooms.get(i).getRoom_name(), SqlConnection.getSqlConnection().getTypeRoomFromIDRoom(rooms.get(i).getId_type_room())+"",rooms.get(i).getFloor()+"",new Button("รายละเอียด"),fxml,rooms.get(i)));
 
         }
 
