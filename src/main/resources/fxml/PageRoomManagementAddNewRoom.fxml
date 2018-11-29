@@ -107,7 +107,7 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <ComboBox fx:id="cb" layoutX="268.0" layoutY="334.0" prefHeight="42.0" prefWidth="307.0" />
+            <ComboBox fx:id="cb" layoutX="268.0" layoutY="334.0" prefHeight="42.0" prefWidth="307.0" promptText="เลือกประเภทห้อง" />
             <Label layoutX="271.0" layoutY="298.0" text="ประเภทห้อง">
                <font>
                   <Font name="System Bold" size="25.0" />

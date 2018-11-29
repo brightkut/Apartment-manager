@@ -1,21 +1,24 @@
 package Controllers;
 
 
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class PageRoomManagementEditTypeRoomController {
+
+    private TypeRoom tr;
+
     @FXML
     private GridPane gridPane;
 
@@ -41,16 +44,16 @@ public class PageRoomManagementEditTypeRoomController {
     private TextField tf;
 
     @FXML
-    private Spinner<Integer> spinnerMonth;
+    private Spinner<Double> spinnerMonth;
 
     @FXML
-    private Spinner<Integer> spinnerDay;
+    private Spinner<Double> spinnerDay;
 
     @FXML
     private Button leftArrow;
 
     String datasave ;
-    int msave,dsave;
+    Double msave,dsave;
 
 
     @FXML
@@ -62,10 +65,12 @@ public class PageRoomManagementEditTypeRoomController {
     }
 
     @FXML
-    void setData(String textF,int m,int d){
+    void setData(String textF,Double m,Double d,TypeRoom typeRoom){
         tf.setText(textF);
         spinnerMonth.getValueFactory().setValue(m);
         spinnerDay.getValueFactory().setValue(d);
+
+        tr = typeRoom;
 
         datasave = textF;
         msave = m;
@@ -74,15 +79,15 @@ public class PageRoomManagementEditTypeRoomController {
 
 
     @FXML
-    void setSpinnerMoth(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerMoth(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerMonth.setValueFactory(valueFactory);
         spinnerMonth.setEditable(true);
     }
 
     @FXML
-    void setSpinnerDay(int min,int max){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
+    void setSpinnerDay(double min,double max){
+        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(min, max, min);
         spinnerDay.setValueFactory(valueFactory);
         spinnerDay.setEditable(true);
     }
@@ -90,16 +95,25 @@ public class PageRoomManagementEditTypeRoomController {
     @FXML
     void  clear(){
         tf.setText("");
-        spinnerDay.getValueFactory().setValue(1);
-        spinnerMonth.getValueFactory().setValue(1);
+        spinnerDay.getValueFactory().setValue(1.0);
+        spinnerMonth.getValueFactory().setValue(1.0);
     }
 
     @FXML
-    void BtnCorrect(ActionEvent event) {
-        System.out.println(tf.getText());
-        System.out.println(spinnerMonth.getValue());
-        System.out.println(spinnerDay.getValue());
-        clear();
+    void BtnCorrect(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("คอนเฟิร์ม การแก้ไขประภทห้อง");
+        alert.setHeaderText("คอนเฟิร์ม การแก้ไข");
+        alert.setContentText("คุณแน่ใจที่จะแก้ไข ประเภทห้อง: "+tf.getText()+" รายวัน: "+spinnerDay.getValue()+" รายเดือน: "+spinnerMonth.getValue()+" ?");
+        Optional<ButtonType> action = alert.showAndWait();
+
+        if (action.get() == ButtonType.OK){
+            SqlConnection.getSqlConnection().updateTypeRoom(tr.getIdTypeRoom(),tf.getText(),spinnerMonth.getValue(),spinnerDay.getValue());
+            GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementTypeAll.fxml"));
+            gridPane.getChildren().setAll(pane);
+            clear();
+        }
+
     }
 
     @FXML
@@ -116,7 +130,7 @@ public class PageRoomManagementEditTypeRoomController {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
             PageRoomManagementInfoTypeRoomController controller = loader.getController();
-            controller.setData(datasave,msave,dsave);
+            controller.setData(datasave,msave,dsave,tr);
 
             stage.show();
 
@@ -140,7 +154,7 @@ public class PageRoomManagementEditTypeRoomController {
             stage.setScene(new Scene((Parent) loader.load(), 1280, 800));
 
             PageRoomManagementInfoTypeRoomController controller = loader.getController();
-            controller.setData(datasave,msave,dsave);
+            controller.setData(datasave,msave,dsave,tr);
 
             stage.show();
 
@@ -150,26 +164,33 @@ public class PageRoomManagementEditTypeRoomController {
 
     }
 
+    //ไปหน้าค้นหาจากเมนู
     @FXML
-    void handleFeature1Btn(ActionEvent event) {
+    void handleFeature1Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
+        gridPane.getChildren().setAll(pane);
+    }
+
+    //ไปหน้าแจ้งชำระจากเมนู
+    @FXML
+    void handleFeature2Btn(ActionEvent event) throws IOException {
 
     }
 
-    @FXML
-    void handleFeature2Btn(ActionEvent event) {
-
-    }
-
+    //ไปหน้าจัดการห้องจากเมนู
     @FXML
     void handleFeature4Btn(ActionEvent event) throws IOException {
+        //Fluke Pipatphol coming
         GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
         gridPane.getChildren().setAll(pane);
 
     }
 
+    //ไปหน้าจัดการหอพักจากเมนู
     @FXML
-    void handleFeature5Btn(ActionEvent event) {
-
+    void handleFeature5Btn(ActionEvent event) throws IOException {
+        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/ManageApartmentAndEditPage.fxml"));
+        gridPane.getChildren().setAll(pane);
     }
 
 }
