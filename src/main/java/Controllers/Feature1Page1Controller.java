@@ -172,7 +172,12 @@ public class Feature1Page1Controller {
                             descButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    System.out.println("Clicked! " + room.getRoom_name());
+                                    try {
+                                        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page2.fxml"));
+                                        gridPane.getChildren().setAll(pane);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 
@@ -180,7 +185,12 @@ public class Feature1Page1Controller {
                             reserveButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    System.out.println("Reserve! " + room.getRoom_name());
+                                    try {
+                                        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page3.fxml"));
+                                        gridPane.getChildren().setAll(pane);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             });
 
@@ -220,10 +230,8 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleFeature4Btn(ActionEvent event) throws IOException {
-        //Fluke Pipatphol coming
         GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
         gridPane.getChildren().setAll(pane);
-
     }
 
     @FXML
@@ -269,7 +277,7 @@ public class Feature1Page1Controller {
     }
 
     @FXML
-    void handleSearchBtn(ActionEvent event) {
+    void handleSearchBtn(ActionEvent event) throws IOException {
 
     }
 
