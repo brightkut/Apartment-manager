@@ -1,5 +1,8 @@
 package Controllers;
 
+import Models.Room;
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -20,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.*;
 
 public class Feature1Page1Controller {
 
@@ -45,11 +49,11 @@ public class Feature1Page1Controller {
     @FXML
     private DatePicker toDatePicker;
     @FXML
-    private TextField numMonthField;
+    private Spinner<Integer> numMonthField;
     @FXML
-    private ComboBox<?> roomTypeBox;
+    private ComboBox<TypeRoom> roomTypeBox;
     @FXML
-    private ComboBox<?> floorBox;
+    private ComboBox<Integer> floorBox;
 
     @FXML
     private Button searchBtn;
@@ -72,12 +76,19 @@ public class Feature1Page1Controller {
     @FXML
     private TableColumn<RoomRecord, RoomRecord> buttonCol;
 
-    private final ObservableList<RoomRecord> data =
+    private ObservableList<TypeRoom> typeRooms;
+    private ObservableList<Integer> floors;
+
+    private ObservableList<RoomRecord> results =
 
             FXCollections.observableArrayList(
                     new RoomRecord("room1", "1", "1"),
                     new RoomRecord("room2", "2", "2")
             );
+
+    private final int MONTHLY = 0;
+    private final int DAILY = 1;
+    private int reserveType;
 
     public static class RoomRecord {
 
@@ -131,6 +142,46 @@ public class Feature1Page1Controller {
 
     @FXML
     private void initialize() {
+
+        // Setup
+        reserveType = MONTHLY;
+
+        // Spinner
+        SpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
+        numMonthField.setValueFactory(factory);
+        numMonthField.setEditable(true);
+        numMonthField.getValueFactory().setValue(1);
+        TextFormatter formatter = new TextFormatter(factory.getConverter(), factory.getValue());
+        numMonthField.getEditor().setTextFormatter(formatter);
+        factory.valueProperty().bindBidirectional(formatter.valueProperty());
+
+        // ComboBox
+        typeRooms = FXCollections.observableArrayList();
+        typeRooms.add(new TypeRoom(0, "ทุกประเภท", 0, 0, "active"));
+        typeRooms.addAll(SqlConnection.getSqlConnection().selectAllTypeRoom());
+        Callback<ListView<TypeRoom>, ListCell<TypeRoom>> typeFactory = lv -> new ListCell<TypeRoom>() {
+
+            @Override
+            protected void updateItem(TypeRoom typeRoom, boolean empty) {
+                super.updateItem(typeRoom, empty);
+                setText(empty ? "" : typeRoom.getTypeRoom());
+            }
+
+        };
+        roomTypeBox.setCellFactory(typeFactory);
+        roomTypeBox.setButtonCell(typeFactory.call(null));
+        roomTypeBox.setItems(typeRooms);
+
+        SortedSet<Integer> temp = new TreeSet<>();
+        for (Room room : SqlConnection.getSqlConnection().selectAllRoom()) {
+            temp.add(room.getFloor());
+        }
+        ObservableList list = FXCollections.observableArrayList();
+        list.add("ทุกชั้น");
+        list.addAll(temp);
+        floorBox.setItems(list);
+
+        // TableView
         tableView.setEditable(true);
 
         roomNameCol.setCellValueFactory(new PropertyValueFactory<RoomRecord, String>("room_name"));
@@ -214,7 +265,13 @@ public class Feature1Page1Controller {
             }
         });
 
-        tableView.setItems(data);
+        update();
+
+    }
+
+    @FXML
+    void update() {
+        tableView.setItems(results);
     }
 
     @FXML
@@ -242,25 +299,29 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleDailyBtn(ActionEvent event) {
-        if (toDatePicker.isDisable()) {
+        if (reserveType == MONTHLY) {
             swapDisable(numMonthField);
             swapDisable(numMonthLabel);
-            numMonthField.setText("");
+            numMonthField.getValueFactory().setValue(1);
             swapDisable(toDatePicker);
             toDatePicker.setValue(null);
             swapDisable(toDateLabel);
+
+            reserveType = DAILY;
         }
     }
 
     @FXML
     void handleMonthlyBtn(ActionEvent event) {
-        if (numMonthField.isDisable()) {
+        if (reserveType == DAILY) {
             swapDisable(toDatePicker);
             toDatePicker.setValue(null);
             swapDisable(toDateLabel);
             swapDisable(numMonthField);
-            numMonthField.setText("1");
+            numMonthField.getValueFactory().setValue(1);
             swapDisable(numMonthLabel);
+
+            reserveType = MONTHLY;
         }
     }
 
@@ -278,7 +339,14 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
+        if (reserveType == MONTHLY &&
+        toDatePicker.getValue() != null) {
+            if (roomTypeBox.getValue().equals("ทุกประเภท") && floorBox.getValue().equals("ทุกชั้น")) {
+                // results = FXCollections.observableArrayList(SqlConnection.getSqlConnection().selectIDRoomThatReservationNotInRange(toDatePicker.getValue(), toDatePicker.getValue().plusMonths(numMonthField.getValue())));
+            }
+        } else if (reserveType == DAILY) {
 
+        }
     }
 
 }
