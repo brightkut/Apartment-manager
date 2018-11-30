@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.Reservation;
 import Models.Room;
 import Models.SqlConnection;
 import Models.TypeRoom;
@@ -91,7 +92,7 @@ public class Feature1Page1Controller {
     private final int DAILY = 1;
     private int reserveType;
 
-    class RoomRecord {
+    public class RoomRecord {
 
         private final SimpleStringProperty id_room, room_name, id_type_room, floor, status;
 
@@ -263,10 +264,26 @@ public class Feature1Page1Controller {
                             reserveButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
+                                    Stage stage = (Stage) gridPane.getScene().getWindow();
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page3.fxml"));
                                     try {
-                                        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page3.fxml"));
-                                        gridPane.getChildren().setAll(pane);
-                                    } catch (IOException e) {
+                                        stage.setScene(new Scene(loader.load(), 1280, 800));
+                                        Feature1Page3Controller controller = loader.getController();
+
+                                        LocalDate date_in =  fromDatePicker.getValue();
+                                        controller.setDate_in(date_in);
+                                        if (reserveType == MONTHLY) {
+                                            controller.setType("MOTHLY");
+                                            controller.setDate_out(date_in.plusMonths(numMonthField.getValue()));
+                                        }
+                                        else if (reserveType == DAILY) {
+                                            controller.setType("DAILY");
+                                            controller.setDate_out(toDatePicker.getValue());
+                                        }
+                                        controller.setRoom(new Room(Integer.parseInt(room.getId_room()), room.getRoom_name(), Integer.parseInt(room.getId_type_room()), Integer.parseInt(room.getFloor()), room.getStatus()));
+                                        stage.show();
+                                    }
+                                    catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
@@ -421,7 +438,6 @@ public class Feature1Page1Controller {
 
     private void setResults(ArrayList<Room> list, SortedSet<Integer> roomIDs) {
         rooms.clear();
-        SqlConnection instance = SqlConnection.getSqlConnection();
         int index = 0;
         Iterator<Integer> iterator = roomIDs.iterator();
 
