@@ -507,26 +507,7 @@ public class SqlConnection {
         }
     }
 
-    public String getTypeRoomFromIDRoom(int id){
 
-        Connection c = connect();
-        String subName ="";
-        try {
-            if (c != null) {
-                String query = "Select type_room from TypeRoom where id_type_room = '"+Integer.toString(id)+"'";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-
-                subName = rs.getString(1);
-                c.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e);
-        }
-
-        return subName;
-
-    }
     public int getIDroomByNameRoom(String n){
 
         Connection c = connect();
@@ -782,6 +763,8 @@ public class SqlConnection {
 
 
 
+
+    //get room by id
     public Room getRoomByID(int idRoom){
         Connection c = connect();
 
@@ -803,6 +786,129 @@ public class SqlConnection {
         }
 
         return null;
+    }
+
+
+    //get typeroom by id
+    public TypeRoom getTypeRoomByID(int idTypeRoom){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+
+
+                String query = "Select * from TypeRoom where status = 'active' and id_type_room = '"+Integer.toString(idTypeRoom)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                TypeRoom r = new TypeRoom(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getString(5));
+
+
+                c.close();
+                return r;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    //get Reservation by id
+    public Reservation getReservationByID(int idReserve){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+
+
+                String query = "Select * from Reservation where status = 'active' and id_reserve = '"+Integer.toString(idReserve)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                Reservation r = new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8));
+
+
+                c.close();
+                return r;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    //get ArraysList Debt
+
+    public ArrayList<Debt> selectAllFromDebt(){
+
+        Connection c = connect();
+        ArrayList<Debt> r = new ArrayList<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Debt where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    r.add(new Debt(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getDouble(4),rs.getString(5)));
+
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return r;
+
+    }
+
+    public ArrayList<Debt> selectAllFromDebtNotPaid(){
+
+        Connection c = connect();
+        ArrayList<Debt> r = new ArrayList<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Debt where status = 'unactive'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    r.add(new Debt(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getDouble(4),rs.getString(5)));
+
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+
+
+
+    public String getStringTypeRoomFromIDRoom(int id){
+
+        Connection c = connect();
+        String subName ="";
+        try {
+            if (c != null) {
+                String query = "Select type_room from TypeRoom where id_type_room = '"+Integer.toString(id)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                subName = rs.getString(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return subName;
+
     }
 
     public void insertReservation(LocalDate dIn,LocalDate dOut,int idRoom ,String typeReserve,String nameGuest,String phoneNum){
