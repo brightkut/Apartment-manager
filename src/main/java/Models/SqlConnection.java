@@ -447,7 +447,7 @@ public class SqlConnection {
 
         try {
             if (c != null) {
-                String query = "Update TypeRoom Set status = ? Where id_type_room = ";
+                String query = "Update TypeRoom Set status = ? Where id_type_room = ?";
 
                 PreparedStatement ps = c.prepareStatement(query);
                 ps.setString(1,"unactive");
