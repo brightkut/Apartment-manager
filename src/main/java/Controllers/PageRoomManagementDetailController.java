@@ -97,7 +97,7 @@ public class PageRoomManagementDetailController {
 
         setVisible();
 
-        setSpinner_floor(1,100);
+        setSpinner_floor(1,Integer.MAX_VALUE);
         initTable();
         setStyleCols();
         loadData();
@@ -140,7 +140,10 @@ public class PageRoomManagementDetailController {
     void setSpinner_floor(int min,int max){
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max, min);
         spinner_floor.setValueFactory(valueFactory);
-        spinner_floor.setEditable(false);
+        spinner_floor.setEditable(true);
+        TextFormatter formatter = new TextFormatter(valueFactory.getConverter(), valueFactory.getValue());
+        spinner_floor.getEditor().setTextFormatter(formatter);
+        valueFactory.valueProperty().bindBidirectional(formatter.valueProperty());
     }
 
 
@@ -227,7 +230,7 @@ public class PageRoomManagementDetailController {
         Optional<ButtonType> action = alert.showAndWait();
 
         if (action.get() == ButtonType.OK){
-            System.out.println("delete");
+//            System.out.println("delete");
             int s = SqlConnection.getSqlConnection().getIDroomByNameRoom(label_nameroom.getText());
             SqlConnection.getSqlConnection().deleteRoom(s);
             GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
@@ -270,8 +273,8 @@ public class PageRoomManagementDetailController {
             System.out.println("edit");
             int s = SqlConnection.getSqlConnection().getIDroomByNameRoom(label_nameroom.getText());
             int t = SqlConnection.getSqlConnection().getIDTyperoomFromNameTypeRoom(cb_type.getValue());
-            System.out.println(cb_type.getValue());
-            System.out.println(t);
+//            System.out.println(cb_type.getValue());
+//            System.out.println(t);
             SqlConnection.getSqlConnection().updateRoom(s,textF_name.getText(),spinner_floor.getValue(),t);
             GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/PageRoomManagementMain.fxml"));
             gridPane.getChildren().setAll(pane);

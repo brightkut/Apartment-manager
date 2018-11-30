@@ -44,8 +44,9 @@ public class PageRoomManagementTypeAddNewTypeController {
 
     @FXML
     public  void initialize() {
-        setSpinnerMoth(0,100000);
-        setSpinnerDay(0,100000);
+        setSpinnerMoth(0,Double.MAX_VALUE);
+        setSpinnerDay(0,Double.MAX_VALUE);
+
     }
 
     @FXML
