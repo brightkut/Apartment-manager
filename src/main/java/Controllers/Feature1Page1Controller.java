@@ -15,11 +15,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -87,13 +91,9 @@ public class Feature1Page1Controller {
     private final int DAILY = 1;
     private int reserveType;
 
-    public class RoomRecord {
+    class RoomRecord {
 
-        private final SimpleStringProperty id_room;
-        private final SimpleStringProperty room_name;
-        private final SimpleStringProperty id_type_room;
-        private final SimpleStringProperty floor;
-        private final SimpleStringProperty status;
+        private final SimpleStringProperty id_room, room_name, id_type_room, floor, status;
 
         public RoomRecord(Room room) {
             this.id_room = new SimpleStringProperty(room.getId_room() + "");
@@ -245,10 +245,15 @@ public class Feature1Page1Controller {
                             descButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
+                                    Stage stage = (Stage) gridPane.getScene().getWindow();
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page2.fxml"));
                                     try {
-                                        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page2.fxml"));
-                                        gridPane.getChildren().setAll(pane);
-                                    } catch (IOException e) {
+                                        stage.setScene(new Scene(loader.load(), 1280, 800));
+                                        Feature1Page2Controller controller = loader.getController();
+                                        controller.setRoom(new Room(Integer.parseInt(room.getId_room()), room.getRoom_name(), Integer.parseInt(room.getId_type_room()), Integer.parseInt(room.getFloor()), room.getStatus()));
+                                        stage.show();
+                                    }
+                                    catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
@@ -302,13 +307,11 @@ public class Feature1Page1Controller {
         gridPane.getChildren().setAll(pane);
     }
 
-    //ไปหน้าแจ้งชำระจากเมนู
     @FXML
     void handleFeature2Btn(ActionEvent event) throws IOException {
         GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/DebtReminder.fxml"));
         gridPane.getChildren().setAll(pane);
     }
-
 
     @FXML
     void handleFeature4Btn(ActionEvent event) throws IOException {
@@ -389,26 +392,19 @@ public class Feature1Page1Controller {
             return;
         }
 
-//        for (int i = 1; i < 5; i++) {
-//            instance.insertReservation(date_in.plusMonths(i), date_out.plusMonths(i), 1, "MONTHLY", "test", "testTel");
-//            instance.insertReservation(date_in.plusWeeks(2), date_out.plusWeeks(2), 2, "MONTHLY", "test", "testTel");
-//        }
-
-
-
         if (date_in != null && date_out != null) {
 
             String type_name = roomTypeBox.getValue().getTypeRoom();
             String floor = floorBox.getValue() + "";
 
             if (type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
-                setResults(instance.selectIDRoomThatReservationNotInRange(date_in, date_out));
+                setResults(instance.selectAllRoom(), instance.selectIDRoomThatReservationNotInRange(date_in, date_out));
             } else if (type_name.equals("ทุกประเภท") && !floor.equals("ทุกชั้น")) {
-                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByFloor(date_in, date_out, floorBox.getValue()));
+                setResults(instance.selectAllRoomWithFloor(floorBox.getValue()), instance.selectIDRoomThatReservationNotInRangeFilterByFloor(date_in, date_out, floorBox.getValue()));
             } else if (!type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
-                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoom(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom()));
+                setResults(instance.selectAllRoomWithType(roomTypeBox.getValue().getIdTypeRoom()), instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoom(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom()));
             } else {
-                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoomAndFloor(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()));
+                setResults(instance.selectAllRoomWithTypeAndFloor(roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()), instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoomAndFloor(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()));
             }
 
             update();
@@ -423,12 +419,22 @@ public class Feature1Page1Controller {
 
     }
 
-    private void setResults(Set<Integer> roomIDs) {
+    private void setResults(ArrayList<Room> list, SortedSet<Integer> roomIDs) {
         rooms.clear();
         SqlConnection instance = SqlConnection.getSqlConnection();
-        for (int id : roomIDs) {
-            rooms.add(new RoomRecord(instance.getRoomByID(id)));
+        int index = 0;
+        Iterator<Integer> iterator = roomIDs.iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next() == list.get(index).getId_room()) {
+                list.remove(index);
+            } else index++;
         }
+
+        for (Room room : list) {
+            rooms.add(new RoomRecord(room));
+        }
+
     }
 
 }
