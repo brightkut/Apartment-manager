@@ -21,8 +21,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Feature1Page1Controller {
@@ -79,27 +81,34 @@ public class Feature1Page1Controller {
     private ObservableList<TypeRoom> typeRooms;
     private ObservableList<Integer> floors;
 
-    private ObservableList<RoomRecord> results =
-
-            FXCollections.observableArrayList(
-                    new RoomRecord("room1", "1", "1"),
-                    new RoomRecord("room2", "2", "2")
-            );
+    private ObservableList<RoomRecord> rooms;
 
     private final int MONTHLY = 0;
     private final int DAILY = 1;
     private int reserveType;
 
-    public static class RoomRecord {
+    public class RoomRecord {
 
+        private final SimpleStringProperty id_room;
         private final SimpleStringProperty room_name;
-        private final SimpleStringProperty type_room;
+        private final SimpleStringProperty id_type_room;
         private final SimpleStringProperty floor;
+        private final SimpleStringProperty status;
 
-        private RoomRecord(String room_name, String type_room, String floor) {
-            this.room_name = new SimpleStringProperty(room_name);
-            this.type_room = new SimpleStringProperty(type_room);
-            this.floor = new SimpleStringProperty(floor);
+        public RoomRecord(Room room) {
+            this.id_room = new SimpleStringProperty(room.getId_room() + "");
+            this.room_name = new SimpleStringProperty(room.getRoom_name());
+            this.id_type_room = new SimpleStringProperty(room.getId_type_room() + "");
+            this.floor = new SimpleStringProperty(room.getFloor() + "");
+            this.status = new SimpleStringProperty(room.getStatus());
+        }
+
+        public String getId_room() {
+            return id_room.get();
+        }
+
+        public SimpleStringProperty id_roomProperty() {
+            return id_room;
         }
 
         public String getRoom_name() {
@@ -110,20 +119,12 @@ public class Feature1Page1Controller {
             return room_name;
         }
 
-        public void setRoom_name(String room_name) {
-            this.room_name.set(room_name);
+        public String getId_type_room() {
+            return id_type_room.get();
         }
 
-        public String getType_room() {
-            return type_room.get();
-        }
-
-        public SimpleStringProperty type_roomProperty() {
-            return type_room;
-        }
-
-        public void setType_room(String type_room) {
-            this.type_room.set(type_room);
+        public SimpleStringProperty id_type_roomProperty() {
+            return id_type_room;
         }
 
         public String getFloor() {
@@ -134,10 +135,13 @@ public class Feature1Page1Controller {
             return floor;
         }
 
-        public void setFloor(String floor) {
-            this.floor.set(floor);
+        public String getStatus() {
+            return status.get();
         }
 
+        public SimpleStringProperty statusProperty() {
+            return status;
+        }
     }
 
     @FXML
@@ -168,9 +172,25 @@ public class Feature1Page1Controller {
             }
 
         };
+        roomTypeBox.setConverter(new StringConverter<TypeRoom>() {
+            @Override
+            public String toString(TypeRoom type) {
+                if (type == null){
+                    return null;
+                } else {
+                    return type.getIdTypeRoom() + "";
+                }
+            }
+
+            @Override
+            public TypeRoom fromString(String id) {
+                return null;
+            }
+        });
         roomTypeBox.setCellFactory(typeFactory);
         roomTypeBox.setButtonCell(typeFactory.call(null));
         roomTypeBox.setItems(typeRooms);
+        roomTypeBox.getSelectionModel().selectFirst();
 
         SortedSet<Integer> temp = new TreeSet<>();
         for (Room room : SqlConnection.getSqlConnection().selectAllRoom()) {
@@ -180,8 +200,10 @@ public class Feature1Page1Controller {
         list.add("ทุกชั้น");
         list.addAll(temp);
         floorBox.setItems(list);
+        floorBox.getSelectionModel().selectFirst();
 
         // TableView
+        rooms = FXCollections.observableArrayList();
         tableView.setEditable(true);
 
         roomNameCol.setCellValueFactory(new PropertyValueFactory<RoomRecord, String>("room_name"));
@@ -271,7 +293,7 @@ public class Feature1Page1Controller {
 
     @FXML
     void update() {
-        tableView.setItems(results);
+        tableView.setItems(rooms);
     }
 
     @FXML
@@ -308,6 +330,7 @@ public class Feature1Page1Controller {
             swapDisable(toDateLabel);
 
             reserveType = DAILY;
+            rooms.clear();
         }
     }
 
@@ -322,6 +345,7 @@ public class Feature1Page1Controller {
             swapDisable(numMonthLabel);
 
             reserveType = MONTHLY;
+            rooms.clear();
         }
     }
 
@@ -339,13 +363,68 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
-        if (reserveType == MONTHLY &&
-        toDatePicker.getValue() != null) {
-            if (roomTypeBox.getValue().equals("ทุกประเภท") && floorBox.getValue().equals("ทุกชั้น")) {
-                // results = FXCollections.observableArrayList(SqlConnection.getSqlConnection().selectIDRoomThatReservationNotInRange(toDatePicker.getValue(), toDatePicker.getValue().plusMonths(numMonthField.getValue())));
-            }
-        } else if (reserveType == DAILY) {
+        SqlConnection instance = SqlConnection.getSqlConnection();
 
+        LocalDate date_in = null;
+        LocalDate date_out = null;
+
+        if (reserveType == MONTHLY && fromDatePicker.getValue() != null) {
+            date_in = fromDatePicker.getValue();
+            date_out = date_in.plusMonths(numMonthField.getValue());
+        }
+
+        else if (reserveType == DAILY && fromDatePicker.getValue() != null && toDatePicker.getValue() != null) {
+            date_in = fromDatePicker.getValue();
+            date_out = toDatePicker.getValue();
+        }
+
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ไม่สามารถค้นหาได้");
+            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดค้นหา");
+            alert.showAndWait();
+            return;
+        }
+
+//        for (int i = 1; i < 5; i++) {
+//            instance.insertReservation(date_in.plusMonths(i), date_out.plusMonths(i), 1, "MONTHLY", "test", "testTel");
+//            instance.insertReservation(date_in.plusWeeks(2), date_out.plusWeeks(2), 2, "MONTHLY", "test", "testTel");
+//        }
+
+
+
+        if (date_in != null && date_out != null) {
+
+            String type_name = roomTypeBox.getValue().getTypeRoom();
+            String floor = floorBox.getValue() + "";
+
+            if (type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
+                setResults(instance.selectIDRoomThatReservationNotInRange(date_in, date_out));
+            } else if (type_name.equals("ทุกประเภท") && !floor.equals("ทุกชั้น")) {
+                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByFloor(date_in, date_out, floorBox.getValue()));
+            } else if (!type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
+                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoom(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom()));
+            } else {
+                setResults(instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoomAndFloor(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()));
+            }
+
+            update();
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ไม่สามารถค้นหาได้");
+            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดค้นหา");
+            alert.showAndWait();
+            return;
+        }
+
+    }
+
+    private void setResults(Set<Integer> roomIDs) {
+        rooms.clear();
+        SqlConnection instance = SqlConnection.getSqlConnection();
+        for (int id : roomIDs) {
+            rooms.add(new RoomRecord(instance.getRoomByID(id)));
         }
     }
 

@@ -119,8 +119,8 @@
             <Line endX="850.0" layoutX="361.0" layoutY="150.0" startX="-100.0" />
             <DatePicker fx:id="fromDatePicker" layoutX="261.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" />
             <DatePicker fx:id="toDatePicker" disable="true" layoutX="471.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" visible="false" />
-            <ComboBox fx:id="roomTypeBox" layoutX="692.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" promptText="ทุกประเภท" />
-            <ComboBox fx:id="floorBox" layoutX="901.0" layoutY="302.0" prefHeight="50.0" prefWidth="100.0" promptText="ทุกชั้น" />
+            <ComboBox fx:id="roomTypeBox" layoutX="692.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" />
+            <ComboBox fx:id="floorBox" layoutX="901.0" layoutY="302.0" prefHeight="50.0" prefWidth="100.0" />
             <Button fx:id="searchBtn" layoutX="1022.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="75.0" prefWidth="190.0" text=" ค้นหาเลย">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
