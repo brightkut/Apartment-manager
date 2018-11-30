@@ -1,5 +1,8 @@
 package Controllers;
 
+import Models.Room;
+import Models.SqlConnection;
+import Models.TypeRoom;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -12,14 +15,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Feature1Page1Controller {
 
@@ -45,11 +55,11 @@ public class Feature1Page1Controller {
     @FXML
     private DatePicker toDatePicker;
     @FXML
-    private TextField numMonthField;
+    private Spinner<Integer> numMonthField;
     @FXML
-    private ComboBox<?> roomTypeBox;
+    private ComboBox<TypeRoom> roomTypeBox;
     @FXML
-    private ComboBox<?> floorBox;
+    private ComboBox<Integer> floorBox;
 
     @FXML
     private Button searchBtn;
@@ -72,23 +82,33 @@ public class Feature1Page1Controller {
     @FXML
     private TableColumn<RoomRecord, RoomRecord> buttonCol;
 
-    private final ObservableList<RoomRecord> data =
+    private ObservableList<TypeRoom> typeRooms;
+    private ObservableList<Integer> floors;
 
-            FXCollections.observableArrayList(
-                    new RoomRecord("room1", "1", "1"),
-                    new RoomRecord("room2", "2", "2")
-            );
+    private ObservableList<RoomRecord> rooms;
 
-    public static class RoomRecord {
+    private final int MONTHLY = 0;
+    private final int DAILY = 1;
+    private int reserveType;
 
-        private final SimpleStringProperty room_name;
-        private final SimpleStringProperty type_room;
-        private final SimpleStringProperty floor;
+    class RoomRecord {
 
-        private RoomRecord(String room_name, String type_room, String floor) {
-            this.room_name = new SimpleStringProperty(room_name);
-            this.type_room = new SimpleStringProperty(type_room);
-            this.floor = new SimpleStringProperty(floor);
+        private final SimpleStringProperty id_room, room_name, id_type_room, floor, status;
+
+        public RoomRecord(Room room) {
+            this.id_room = new SimpleStringProperty(room.getId_room() + "");
+            this.room_name = new SimpleStringProperty(room.getRoom_name());
+            this.id_type_room = new SimpleStringProperty(room.getId_type_room() + "");
+            this.floor = new SimpleStringProperty(room.getFloor() + "");
+            this.status = new SimpleStringProperty(room.getStatus());
+        }
+
+        public String getId_room() {
+            return id_room.get();
+        }
+
+        public SimpleStringProperty id_roomProperty() {
+            return id_room;
         }
 
         public String getRoom_name() {
@@ -99,20 +119,12 @@ public class Feature1Page1Controller {
             return room_name;
         }
 
-        public void setRoom_name(String room_name) {
-            this.room_name.set(room_name);
+        public String getId_type_room() {
+            return id_type_room.get();
         }
 
-        public String getType_room() {
-            return type_room.get();
-        }
-
-        public SimpleStringProperty type_roomProperty() {
-            return type_room;
-        }
-
-        public void setType_room(String type_room) {
-            this.type_room.set(type_room);
+        public SimpleStringProperty id_type_roomProperty() {
+            return id_type_room;
         }
 
         public String getFloor() {
@@ -123,14 +135,75 @@ public class Feature1Page1Controller {
             return floor;
         }
 
-        public void setFloor(String floor) {
-            this.floor.set(floor);
+        public String getStatus() {
+            return status.get();
         }
 
+        public SimpleStringProperty statusProperty() {
+            return status;
+        }
     }
 
     @FXML
     private void initialize() {
+
+        // Setup
+        reserveType = MONTHLY;
+
+        // Spinner
+        SpinnerValueFactory factory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE);
+        numMonthField.setValueFactory(factory);
+        numMonthField.setEditable(true);
+        numMonthField.getValueFactory().setValue(1);
+        TextFormatter formatter = new TextFormatter(factory.getConverter(), factory.getValue());
+        numMonthField.getEditor().setTextFormatter(formatter);
+        factory.valueProperty().bindBidirectional(formatter.valueProperty());
+
+        // ComboBox
+        typeRooms = FXCollections.observableArrayList();
+        typeRooms.add(new TypeRoom(0, "ทุกประเภท", 0, 0, "active"));
+        typeRooms.addAll(SqlConnection.getSqlConnection().selectAllTypeRoom());
+        Callback<ListView<TypeRoom>, ListCell<TypeRoom>> typeFactory = lv -> new ListCell<TypeRoom>() {
+
+            @Override
+            protected void updateItem(TypeRoom typeRoom, boolean empty) {
+                super.updateItem(typeRoom, empty);
+                setText(empty ? "" : typeRoom.getTypeRoom());
+            }
+
+        };
+        roomTypeBox.setConverter(new StringConverter<TypeRoom>() {
+            @Override
+            public String toString(TypeRoom type) {
+                if (type == null){
+                    return null;
+                } else {
+                    return type.getIdTypeRoom() + "";
+                }
+            }
+
+            @Override
+            public TypeRoom fromString(String id) {
+                return null;
+            }
+        });
+        roomTypeBox.setCellFactory(typeFactory);
+        roomTypeBox.setButtonCell(typeFactory.call(null));
+        roomTypeBox.setItems(typeRooms);
+        roomTypeBox.getSelectionModel().selectFirst();
+
+        SortedSet<Integer> temp = new TreeSet<>();
+        for (Room room : SqlConnection.getSqlConnection().selectAllRoom()) {
+            temp.add(room.getFloor());
+        }
+        ObservableList list = FXCollections.observableArrayList();
+        list.add("ทุกชั้น");
+        list.addAll(temp);
+        floorBox.setItems(list);
+        floorBox.getSelectionModel().selectFirst();
+
+        // TableView
+        rooms = FXCollections.observableArrayList();
         tableView.setEditable(true);
 
         roomNameCol.setCellValueFactory(new PropertyValueFactory<RoomRecord, String>("room_name"));
@@ -172,10 +245,15 @@ public class Feature1Page1Controller {
                             descButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
+                                    Stage stage = (Stage) gridPane.getScene().getWindow();
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page2.fxml"));
                                     try {
-                                        GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page2.fxml"));
-                                        gridPane.getChildren().setAll(pane);
-                                    } catch (IOException e) {
+                                        stage.setScene(new Scene(loader.load(), 1280, 800));
+                                        Feature1Page2Controller controller = loader.getController();
+                                        controller.setRoom(new Room(Integer.parseInt(room.getId_room()), room.getRoom_name(), Integer.parseInt(room.getId_type_room()), Integer.parseInt(room.getFloor()), room.getStatus()));
+                                        stage.show();
+                                    }
+                                    catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 }
@@ -214,7 +292,13 @@ public class Feature1Page1Controller {
             }
         });
 
-        tableView.setItems(data);
+        update();
+
+    }
+
+    @FXML
+    void update() {
+        tableView.setItems(rooms);
     }
 
     @FXML
@@ -223,13 +307,11 @@ public class Feature1Page1Controller {
         gridPane.getChildren().setAll(pane);
     }
 
-    //ไปหน้าแจ้งชำระจากเมนู
     @FXML
     void handleFeature2Btn(ActionEvent event) throws IOException {
         GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/DebtReminder.fxml"));
         gridPane.getChildren().setAll(pane);
     }
-
 
     @FXML
     void handleFeature4Btn(ActionEvent event) throws IOException {
@@ -245,25 +327,31 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleDailyBtn(ActionEvent event) {
-        if (toDatePicker.isDisable()) {
+        if (reserveType == MONTHLY) {
             swapDisable(numMonthField);
             swapDisable(numMonthLabel);
-            numMonthField.setText("");
+            numMonthField.getValueFactory().setValue(1);
             swapDisable(toDatePicker);
             toDatePicker.setValue(null);
             swapDisable(toDateLabel);
+
+            reserveType = DAILY;
+            rooms.clear();
         }
     }
 
     @FXML
     void handleMonthlyBtn(ActionEvent event) {
-        if (numMonthField.isDisable()) {
+        if (reserveType == DAILY) {
             swapDisable(toDatePicker);
             toDatePicker.setValue(null);
             swapDisable(toDateLabel);
             swapDisable(numMonthField);
-            numMonthField.setText("1");
+            numMonthField.getValueFactory().setValue(1);
             swapDisable(numMonthLabel);
+
+            reserveType = MONTHLY;
+            rooms.clear();
         }
     }
 
@@ -281,6 +369,71 @@ public class Feature1Page1Controller {
 
     @FXML
     void handleSearchBtn(ActionEvent event) throws IOException {
+        SqlConnection instance = SqlConnection.getSqlConnection();
+
+        LocalDate date_in = null;
+        LocalDate date_out = null;
+
+        if (reserveType == MONTHLY && fromDatePicker.getValue() != null) {
+            date_in = fromDatePicker.getValue();
+            date_out = date_in.plusMonths(numMonthField.getValue());
+        }
+
+        else if (reserveType == DAILY && fromDatePicker.getValue() != null && toDatePicker.getValue() != null) {
+            date_in = fromDatePicker.getValue();
+            date_out = toDatePicker.getValue();
+        }
+
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ไม่สามารถค้นหาได้");
+            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดค้นหา");
+            alert.showAndWait();
+            return;
+        }
+
+        if (date_in != null && date_out != null) {
+
+            String type_name = roomTypeBox.getValue().getTypeRoom();
+            String floor = floorBox.getValue() + "";
+
+            if (type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
+                setResults(instance.selectAllRoom(), instance.selectIDRoomThatReservationNotInRange(date_in, date_out));
+            } else if (type_name.equals("ทุกประเภท") && !floor.equals("ทุกชั้น")) {
+                setResults(instance.selectAllRoomWithFloor(floorBox.getValue()), instance.selectIDRoomThatReservationNotInRangeFilterByFloor(date_in, date_out, floorBox.getValue()));
+            } else if (!type_name.equals("ทุกประเภท") && floor.equals("ทุกชั้น")) {
+                setResults(instance.selectAllRoomWithType(roomTypeBox.getValue().getIdTypeRoom()), instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoom(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom()));
+            } else {
+                setResults(instance.selectAllRoomWithTypeAndFloor(roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()), instance.selectIDRoomThatReservationNotInRangeFilterByIdTypeRoomAndFloor(date_in, date_out, roomTypeBox.getValue().getIdTypeRoom(), floorBox.getValue()));
+            }
+
+            update();
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ไม่สามารถค้นหาได้");
+            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดค้นหา");
+            alert.showAndWait();
+            return;
+        }
+
+    }
+
+    private void setResults(ArrayList<Room> list, SortedSet<Integer> roomIDs) {
+        rooms.clear();
+        SqlConnection instance = SqlConnection.getSqlConnection();
+        int index = 0;
+        Iterator<Integer> iterator = roomIDs.iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next() == list.get(index).getId_room()) {
+                list.remove(index);
+            } else index++;
+        }
+
+        for (Room room : list) {
+            rooms.add(new RoomRecord(room));
+        }
 
     }
 
