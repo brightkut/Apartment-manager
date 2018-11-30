@@ -3,6 +3,9 @@ package Models;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 //hi
 public class SqlConnection {
 
@@ -353,12 +356,6 @@ public class SqlConnection {
         int count =0;
         try {
             if (c != null) {
-                String query = "Select count(id_type_room)  from TypeRoom";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
-                    count = rs.getInt(1);
-                }
 
                 if (count==0){
                     String query2 ="Insert into TypeRoom(type_room,rent_per_month,rent_per_day,status) values(?,?,?,?)";
@@ -510,26 +507,7 @@ public class SqlConnection {
         }
     }
 
-    public String getTypeRoomFromIDRoom(int id){
 
-        Connection c = connect();
-        String subName ="";
-        try {
-            if (c != null) {
-                String query = "Select type_room from TypeRoom where id_type_room = '"+Integer.toString(id)+"'";
-                Statement s = c.createStatement();
-                ResultSet rs = s.executeQuery(query);
-
-                subName = rs.getString(1);
-                c.close();
-            }
-        }catch (SQLException e){
-            System.out.println(e);
-        }
-
-        return subName;
-
-    }
     public int getIDroomByNameRoom(String n){
 
         Connection c = connect();
@@ -646,29 +624,259 @@ public class SqlConnection {
 
         return r;
 
-
     }
 
 
-    public ArrayList<Reservation> selectRoomThatReservationInRange(LocalDate date_in,LocalDate date_out){
+    public Set<Integer> selectIDRoomThatReservationNotInRange(LocalDate date_in, LocalDate date_out){
 
         Connection c = connect();
-        ArrayList<Reservation> r = new ArrayList<>();
+        Set<Integer> r = new HashSet<>();
         try {
             if (c != null) {
+
                 String query = "Select * from Reservation where status = 'active'";
                 Statement s = c.createStatement();
                 ResultSet rs = s.executeQuery(query);
-                while (rs.next()){
+
+                while (rs.next()) {
 
                     String date_check_in_of_database = rs.getString(2);
                     String date_check_out_of_database = rs.getString(3);
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in)>=0&&ld2.compareTo(date_out)<=0){
-                        r.add(new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0) {
+                        r.add(rs.getInt(4));
                     }
+
+                }
+
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+
+
+    public Set<Integer> selectIDRoomThatReservationNotInRangeFilterByIdTypeRoom(LocalDate date_in, LocalDate date_out,int idTypeRoom){
+
+        Connection c = connect();
+        Set<Integer> r = new HashSet<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Reservation left join Room on Reservation.id_room = Room.id_room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    String date_check_in_of_database = rs.getString(2);
+                    String date_check_out_of_database = rs.getString(3);
+                    //convert string in database to local date because in database we keep type date in string
+                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
+                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
+                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& idTypeRoom==rs.getInt(11)){
+                        r.add(rs.getInt(4));
+                    }
+
+                }
+
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+
+    public Set<Integer> selectIDRoomThatReservationNotInRangeFilterByFloor(LocalDate date_in, LocalDate date_out,int floor){
+
+        Connection c = connect();
+        Set<Integer> r = new HashSet<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Reservation left join Room on Reservation.id_room = Room.id_room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    String date_check_in_of_database = rs.getString(2);
+                    String date_check_out_of_database = rs.getString(3);
+                    //convert string in database to local date because in database we keep type date in string
+                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
+                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
+                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& floor==rs.getInt(12)){
+                        r.add(rs.getInt(4));
+                    }
+
+                }
+
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+
+    public Set<Integer> selectIDRoomThatReservationNotInRangeFilterByIdTypeRoomAndFloor(LocalDate date_in, LocalDate date_out,int idTypeRoom,int floor){
+
+        Connection c = connect();
+        Set<Integer> r = new HashSet<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Reservation left join Room on Reservation.id_room = Room.id_room";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    String date_check_in_of_database = rs.getString(2);
+                    String date_check_out_of_database = rs.getString(3);
+                    //convert string in database to local date because in database we keep type date in string
+                    LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
+                    LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
+                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& idTypeRoom==rs.getInt(11)&& floor==rs.getInt(12)){
+                        r.add(rs.getInt(4));
+                    }
+
+                }
+
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return r;
+
+    }
+
+
+
+
+    //get room by id
+    public Room getRoomByID(int idRoom){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+
+
+                String query = "Select * from Room where status = 'active' and id_room = '"+Integer.toString(idRoom)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                Room r = new Room(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getString(5));
+
+
+                c.close();
+                return r;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+
+    //get typeroom by id
+    public TypeRoom getTypeRoomByID(int idTypeRoom){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+
+
+                String query = "Select * from TypeRoom where status = 'active' and id_type_room = '"+Integer.toString(idTypeRoom)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                TypeRoom r = new TypeRoom(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getString(5));
+
+
+                c.close();
+                return r;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    //get Reservation by id
+    public Reservation getReservationByID(int idReserve){
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+
+
+                String query = "Select * from Reservation where status = 'active' and id_reserve = '"+Integer.toString(idReserve)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+                Reservation r = new Reservation(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8));
+
+
+                c.close();
+                return r;
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
+    //get ArraysList Debt
+
+    public ArrayList<Debt> selectAllFromDebt(){
+
+        Connection c = connect();
+        ArrayList<Debt> r = new ArrayList<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Debt where status = 'active'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    r.add(new Debt(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getDouble(4),rs.getString(5)));
+
+                }
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+        return r;
+
+    }
+
+    public ArrayList<Debt> selectAllFromDebtNotPaid(){
+
+        Connection c = connect();
+        ArrayList<Debt> r = new ArrayList<>();
+        try {
+            if (c != null) {
+
+                String query = "Select * from Debt where status = 'unactive'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                while (rs.next()) {
+                    r.add(new Debt(rs.getInt(1),rs.getInt(2),rs.getString(3),rs.getDouble(4),rs.getString(5)));
+
                 }
                 c.close();
             }
@@ -679,7 +887,64 @@ public class SqlConnection {
         return r;
 
     }
-    
+
+
+
+    public String getStringTypeRoomFromIDRoom(int id){
+
+        Connection c = connect();
+        String subName ="";
+        try {
+            if (c != null) {
+                String query = "Select type_room from TypeRoom where id_type_room = '"+Integer.toString(id)+"'";
+                Statement s = c.createStatement();
+                ResultSet rs = s.executeQuery(query);
+
+                subName = rs.getString(1);
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+
+        return subName;
+
+    }
+
+    public void insertReservation(LocalDate dIn,LocalDate dOut,int idRoom ,String typeReserve,String nameGuest,String phoneNum){
+        Connection c = connect();
+        int count =0;
+        try {
+            if (c != null) {
+
+
+                if (count==0) {
+                    String query2 = "Insert into Reservation(date_check_in,date_check_out,id_room,type_reserve,name_guest,phone_number,status) values(?,?,?,?,?,?,?)";
+                    PreparedStatement p = c.prepareStatement(query2);
+                    p.setString(1, dIn.toString());
+                    p.setString(2, dOut.toString());
+                    p.setInt(3, idRoom);
+                    p.setString(4, typeReserve);
+                    p.setString(5,nameGuest);
+                    p.setString(6,phoneNum);
+                    p.setString(7,"active");
+                    p.executeUpdate();
+                }
+                c.close();
+
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 
