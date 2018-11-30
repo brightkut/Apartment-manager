@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,7 +15,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Feature1Page1Controller">
+<GridPane fx:id="gridPane" alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.DebtReminderController">
     <children>
         <Pane prefHeight="800.0" prefWidth="1280.0">
             <children>
@@ -94,87 +93,65 @@
                         </Button>
                     </children>
                 </GridPane>
-            <Label layoutX="245.0" layoutY="14.0" prefHeight="150.0" prefWidth="800.0" text="  ค้นหาห้องว่าง และเพิ่มการจอง">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/search-icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font name="System Bold" size="48.0" />
-               </font>
-            </Label>
-            <Button fx:id="monthlyBtn" layoutX="261.0" layoutY="185.0" mnemonicParsing="false" onAction="#handleMonthlyBtn" prefHeight="50.0" prefWidth="200.0" text="แบบรายเดือน">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </Button>
-            <Button fx:id="dailyBtn" layoutX="471.0" layoutY="185.0" mnemonicParsing="false" onAction="#handleDailyBtn" prefHeight="50.0" prefWidth="200.0" text="แบบรายวัน">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </Button>
-            <Line endX="850.0" layoutX="361.0" layoutY="150.0" startX="-100.0" />
-            <DatePicker fx:id="fromDatePicker" layoutX="261.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" />
-            <DatePicker fx:id="toDatePicker" disable="true" layoutX="471.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" visible="false" />
-            <ComboBox fx:id="roomTypeBox" layoutX="692.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" promptText="ทุกประเภท" />
-            <ComboBox fx:id="floorBox" layoutX="901.0" layoutY="302.0" prefHeight="50.0" prefWidth="100.0" promptText="ทุกชั้น" />
-            <Button fx:id="searchBtn" layoutX="1022.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSearchBtn" prefHeight="75.0" prefWidth="190.0" text=" ค้นหาเลย">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/search-icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <font>
-                  <Font size="29.0" />
-               </font>
-            </Button>
-            <Label layoutX="261.0" layoutY="262.0" prefHeight="40.0" prefWidth="200.0" text="วันเข้าพัก">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <Label fx:id="toDateLabel" disable="true" layoutX="471.0" layoutY="262.0" prefHeight="40.0" prefWidth="200.0" text="วันย้ายออก" visible="false">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="692.0" layoutY="262.0" prefHeight="40.0" prefWidth="200.0" text="ประเภทห้อง">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <Label layoutX="901.0" layoutY="262.0" prefHeight="40.0" prefWidth="100.0" text="ชั้น">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <TableView fx:id="tableView" layoutX="261.0" layoutY="380.0" prefHeight="380.0" prefWidth="950.0" stylesheets="@../css/tableview.css">
-              <columns>
-                <TableColumn fx:id="roomNameCol" editable="false" minWidth="50.0" prefWidth="275.0" text="ชื่อห้อง" />
-                <TableColumn fx:id="roomTypeCol" editable="false" minWidth="50.0" prefWidth="200.0" text="ประเภท" />
-                  <TableColumn fx:id="floorCol" editable="false" minWidth="50.0" prefWidth="125.0" text="ชั้น" />
-                  <TableColumn fx:id="buttonCol" editable="false" minWidth="50.0" prefWidth="350.0" resizable="false" />
-              </columns>
-            </TableView>
-            <Label fx:id="numMonthLabel" layoutX="471.0" layoutY="262.0" prefHeight="40.0" prefWidth="200.0" text="จำนวนเดือน">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-            <TextField fx:id="numMonthField" alignment="CENTER_RIGHT" layoutX="471.0" layoutY="302.0" prefHeight="50.0" prefWidth="200.0" text="1" />
-            <Label fx:id="errorLabel" layoutX="683.0" layoutY="180.0" prefHeight="75.0" prefWidth="525.0" />
+                <Label layoutX="232.0" layoutY="14.0" prefHeight="150.0" prefWidth="800.0" text="  แจ้งเตือนรายการหนี้ค้างชำระ">
+                    <font>
+                        <Font name="System Bold" size="48.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/notification-icon.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Label>
+                <Line endX="850.0" layoutX="350.0" layoutY="150.0" startX="-100.0" />
+                <TableView fx:id="tableDebtReminder" layoutX="250.0" layoutY="241.0" prefHeight="380.0" prefWidth="950.0">
+                    <columns>
+                        <TableColumn fx:id="dueDateCol" prefWidth="111.0" text="วันที่" />
+                        <TableColumn fx:id="roomNameCol" prefWidth="122.0" text="ชื่อห้อง" />
+                        <TableColumn fx:id="customerNameCol" prefWidth="180.0" text="คนเข้าพัก" />
+                        <TableColumn fx:id="phoneNumberCol" prefWidth="138.0" text="เบอร์โทรติดต่อ" />
+                        <TableColumn fx:id="roomTypeCol" prefWidth="103.0" text="ประเภท" />
+                        <TableColumn fx:id="debtCol" prefWidth="149.0" text="ยอดค้างชำระ" />
+                        <TableColumn fx:id="buttonCol" prefWidth="146.0" />
+                    </columns>
+                </TableView>
+                <CheckBox fx:id="checkBox" layoutX="1008.0" layoutY="186.0" mnemonicParsing="false" onAction="#check" prefHeight="35.0" prefWidth="192.0" text="แสดงประวัติการชำระ">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </CheckBox>
+                <TextField fx:id="filterField" layoutX="651.0" layoutY="651.0" />
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="526.0" layoutY="651.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/filter-icon.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="559.0" layoutY="651.0" text="Filter Table:">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <Button fx:id="clearButton" layoutX="815.0" layoutY="649.0" mnemonicParsing="false" onAction="#clear" text="clear">
+                    <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/cancel202.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
             </children>
         </Pane>
     </children>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-   </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
 </GridPane>
