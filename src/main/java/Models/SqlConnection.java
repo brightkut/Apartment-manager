@@ -929,7 +929,7 @@ public class SqlConnection {
             if (c != null) {
 
 
-                String query = "Select * from TypeRoom where status = 'active' and id_type_room = '"+Integer.toString(idTypeRoom)+"'";
+                String query = "Select * from TypeRoom where status = 'active' and id_type_room = '"+idTypeRoom+"'";
                 Statement s = c.createStatement();
                 ResultSet rs = s.executeQuery(query);
                 TypeRoom r = new TypeRoom(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getDouble(4),rs.getString(5));
@@ -1027,7 +1027,7 @@ public class SqlConnection {
             if (c != null) {
 
                 if (count==0) {
-                    String query2 = "Insert into Reservation(date_check_in,date_check_out,id_room,type_reserve,name_guest,phone_number,status) values(?,?,?,?,?,?,?)";
+                    String query2 = "Insert into Debt(id_reserve, date_pay_debt, debt_balance, status) values(?,?,?,?)";
                     PreparedStatement p = c.prepareStatement(query2);
                     p.setString(1, id_reserve + "");
                     p.setString(2, date_pay_debt);
