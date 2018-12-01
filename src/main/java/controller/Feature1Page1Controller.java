@@ -81,7 +81,6 @@ public class Feature1Page1Controller {
     private TableColumn<RoomRecord, RoomRecord> buttonCol;
 
     private ObservableList<TypeRoom> typeRooms;
-    private ObservableList<Integer> floors;
 
     private ObservableList<RoomRecord> rooms;
 
@@ -270,29 +269,27 @@ public class Feature1Page1Controller {
                             reserveButton.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
-                                    Stage stage = (Stage) gridPane.getScene().getWindow();
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page3.fxml"));
-                                    try {
-                                        stage.setScene(new Scene(loader.load(), 1280, 800));
-                                        Feature1Page3Controller controller = loader.getController();
+                                        Stage stage = (Stage) gridPane.getScene().getWindow();
+                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feature1Page3.fxml"));
+                                        try {
+                                            stage.setScene(new Scene(loader.load(), 1280, 800));
+                                            Feature1Page3Controller controller = loader.getController();
 
-                                        LocalDate date_in =  fromDatePicker.getValue();
-                                        controller.setDate_in(date_in);
-                                        if (reserveType == MONTHLY) {
-                                            controller.setType("MONTHLY");
-                                            controller.setDate_out(date_in.plusMonths(numMonthField.getValue()));
-                                            controller.setCount(numMonthField.getValue());
+                                            LocalDate date_in = fromDatePicker.getValue();
+                                            controller.setDate_in(date_in);
+                                            if (reserveType == MONTHLY) {
+                                                controller.setType("MONTHLY");
+                                                controller.setDate_out(date_in.plusMonths(numMonthField.getValue()));
+                                                controller.setCount(numMonthField.getValue());
+                                            } else if (reserveType == DAILY) {
+                                                controller.setType("DAILY");
+                                                controller.setDate_out(toDatePicker.getValue());
+                                            }
+                                            controller.setRoom(new Room(Integer.parseInt(room.getId_room()), room.getRoom_name(), Integer.parseInt(room.getId_type_room()), Integer.parseInt(room.getFloor()), room.getStatus()));
+                                            stage.show();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
-                                        else if (reserveType == DAILY) {
-                                            controller.setType("DAILY");
-                                            controller.setDate_out(toDatePicker.getValue());
-                                        }
-                                        controller.setRoom(new Room(Integer.parseInt(room.getId_room()), room.getRoom_name(), Integer.parseInt(room.getId_type_room()), Integer.parseInt(room.getFloor()), room.getStatus()));
-                                        stage.show();
-                                    }
-                                    catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
                                 }
                             });
 
@@ -418,6 +415,14 @@ public class Feature1Page1Controller {
 
         if (date_in != null && date_out != null) {
 
+            if (reserveType == DAILY && (date_out.isBefore(date_in) || date_out.isEqual(date_in))) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ไม่สามารถค้นหาได้");
+                alert.setHeaderText("โปรดกรอกข้อมูลให้ถูกต้องก่อนกดค้นหา");
+                alert.showAndWait();
+                return;
+            }
+
             String type_name = roomTypeBox.getValue().getTypeRoom();
             String floor = floorBox.getValue() + "";
 
@@ -433,12 +438,6 @@ public class Feature1Page1Controller {
 
             update();
 
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ไม่สามารถค้นหาได้");
-            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดค้นหา");
-            alert.showAndWait();
-            return;
         }
 
     }

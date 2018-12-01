@@ -86,7 +86,7 @@ public class Feature1Page3Controller {
     void acceptBtnHandle(ActionEvent event) throws IOException {
         if (!nameField.getText().isEmpty() && !telField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("คุณต้องการจะเพิ่มการจองใหม่ใช่หรือไม่ ?");
+            alert.setHeaderText("คุณต้องการจะเพิ่มการจองใหม่ใช่หรือไม่ ?");
             Optional<ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK){
