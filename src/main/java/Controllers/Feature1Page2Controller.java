@@ -70,7 +70,7 @@ public class Feature1Page2Controller {
 
     private ObservableList<ReserveRecord> records;
 
-    class ReserveRecord {
+    public class ReserveRecord {
 
         private final SimpleStringProperty id_reserve, date_check_in, date_check_out, id_room, type_reserve, name_guest, phone_number, status;
 
@@ -156,23 +156,25 @@ public class Feature1Page2Controller {
 
     @FXML
     void initialize() {
+        records = FXCollections.observableArrayList();
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 roomNameLabel.setText(room.getRoom_name());
-                roomTypeLabel.setText(SqlConnection.getSqlConnection().getTypeRoomFromIDRoom(room.getId_type_room()));
+                roomTypeLabel.setText(SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getTypeRoom());
                 floorLabel.setText(room.getFloor() + "");
+
+                for (Reservation reservation: SqlConnection.getSqlConnection().selectReservationWithRoom(room.getId_room()))
+                    records.add(new ReserveRecord(reservation));
             }
         });
-        records = FXCollections.observableArrayList();
 
         dateInCol.setCellValueFactory(new PropertyValueFactory<ReserveRecord, String>("date_in"));
         dateOutCol.setCellValueFactory(new PropertyValueFactory<ReserveRecord, String>("date_out"));
         reserveTypeCol.setCellValueFactory(new PropertyValueFactory<ReserveRecord, String>("type_reserve"));
         nameCol.setCellValueFactory(new PropertyValueFactory<ReserveRecord, String>("name_guest"));
         telCol.setCellValueFactory(new PropertyValueFactory<ReserveRecord, String>("phone_number"));
-
-
 
         tableView.setItems(records);
     }
