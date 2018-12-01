@@ -91,12 +91,13 @@ public class Feature1Page1Controller {
 
     public class RoomRecord {
 
-        private final SimpleStringProperty id_room, room_name, id_type_room, floor, status;
+        private final SimpleStringProperty id_room, room_name, id_type_room, type_room, floor, status;
 
         public RoomRecord(Room room) {
             this.id_room = new SimpleStringProperty(room.getId_room() + "");
             this.room_name = new SimpleStringProperty(room.getRoom_name());
             this.id_type_room = new SimpleStringProperty(room.getId_type_room() + "");
+            this.type_room = new SimpleStringProperty(SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getTypeRoom());
             this.floor = new SimpleStringProperty(room.getFloor() + "");
             this.status = new SimpleStringProperty(room.getStatus());
         }
@@ -119,6 +120,14 @@ public class Feature1Page1Controller {
 
         public String getId_type_room() {
             return id_type_room.get();
+        }
+
+        public String getType_room() {
+            return type_room.get();
+        }
+
+        public SimpleStringProperty type_roomProperty() {
+            return type_room;
         }
 
         public SimpleStringProperty id_type_roomProperty() {
