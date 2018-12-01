@@ -270,7 +270,7 @@ public class Feature1Page1Controller {
                                         LocalDate date_in =  fromDatePicker.getValue();
                                         controller.setDate_in(date_in);
                                         if (reserveType == MONTHLY) {
-                                            controller.setType("MOTHLY");
+                                            controller.setType("MONTHLY");
                                             controller.setDate_out(date_in.plusMonths(numMonthField.getValue()));
                                             controller.setCount(numMonthField.getValue());
                                         }
