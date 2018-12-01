@@ -777,9 +777,9 @@ public class SqlConnection {
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0) {
+
+                    if (!(date_out.isBefore(ld1) || date_in.isAfter(ld2)))
                         r.add(rs.getInt(4));
-                    }
 
                 }
 
@@ -811,9 +811,8 @@ public class SqlConnection {
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& idTypeRoom==rs.getInt(11)){
+                    if (!(date_out.isBefore(ld1) || date_in.isAfter(ld2)))
                         r.add(rs.getInt(4));
-                    }
 
                 }
 
@@ -844,9 +843,8 @@ public class SqlConnection {
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& floor==rs.getInt(12)){
+                    if (!(date_out.isBefore(ld1) || date_in.isAfter(ld2)))
                         r.add(rs.getInt(4));
-                    }
 
                 }
 
@@ -877,9 +875,8 @@ public class SqlConnection {
                     //convert string in database to local date because in database we keep type date in string
                     LocalDate ld1 = LocalDate.parse(date_check_in_of_database);
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
-                    if (ld1.compareTo(date_in) < 0 && ld2.compareTo(date_out) > 0&& idTypeRoom==rs.getInt(11)&& floor==rs.getInt(12)){
+                    if (!(date_out.isBefore(ld1) || date_in.isAfter(ld2)))
                         r.add(rs.getInt(4));
-                    }
 
                 }
 
