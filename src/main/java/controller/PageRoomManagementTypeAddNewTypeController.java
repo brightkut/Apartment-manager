@@ -1,6 +1,6 @@
-package Controllers;
+package controller;
 
-import Models.SqlConnection;
+import model.SqlConnection;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-import Models.SqlConnection;
+import model.SqlConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
