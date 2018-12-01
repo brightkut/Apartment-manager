@@ -1,8 +1,8 @@
-package Controllers;
+package controller;
 
-import Models.Reservation;
-import Models.Room;
-import Models.SqlConnection;
+import model.Reservation;
+import model.Room;
+import model.SqlConnection;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

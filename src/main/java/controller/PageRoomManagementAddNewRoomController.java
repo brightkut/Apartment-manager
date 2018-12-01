@@ -1,6 +1,6 @@
-package Controllers;
-import Models.SqlConnection;
-import Models.TypeRoom;
+package controller;
+import model.SqlConnection;
+import model.TypeRoom;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

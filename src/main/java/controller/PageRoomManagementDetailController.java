@@ -1,8 +1,8 @@
-package Controllers;
+package controller;
 
-import Models.RoomManagementDetail;
-import Models.SqlConnection;
-import Models.TypeRoom;
+import model.RoomManagementDetail;
+import model.SqlConnection;
+import model.TypeRoom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
