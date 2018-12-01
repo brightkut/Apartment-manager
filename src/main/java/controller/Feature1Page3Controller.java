@@ -1,18 +1,17 @@
 package controller;
 
+import javafx.scene.control.*;
 import model.Room;
 import model.SqlConnection;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -86,25 +85,37 @@ public class Feature1Page3Controller {
     @FXML
     void acceptBtnHandle(ActionEvent event) throws IOException {
         if (!nameField.getText().isEmpty() && !telField.getText().isEmpty()) {
-            // new reserve
-            SqlConnection.getSqlConnection().insertReservation(date_in, date_out, room.getId_room(), type, nameField.getText(), telField.getText());
-            int id_reserve = SqlConnection.getSqlConnection().getRecentReservation();
-            if (type.equals("DAILY")) {
-                // new daily debt
-                long daysBetween = DAYS.between(date_in, date_out);
-                Double debt = SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getRentPerDay();
-                double balance = debt * daysBetween;
-                SqlConnection.getSqlConnection().insertDebt(id_reserve, date_out.toString(), balance);
-            } else if (type.equals("MONTHLY")) {
-                // new monthly debt
-                double balance = SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getRentPerMonth();
-                for (int i = 1; i <= count; i++) {
-                    LocalDate date = date_in.plusMonths(i);
-                    SqlConnection.getSqlConnection().insertDebt(id_reserve, date.toString(), balance);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("คุณต้องการจะเพิ่มการจองใหม่ใช่หรือไม่ ?");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK){
+                // new reserve
+                SqlConnection.getSqlConnection().insertReservation(date_in, date_out, room.getId_room(), type, nameField.getText(), telField.getText());
+                int id_reserve = SqlConnection.getSqlConnection().getRecentReservation();
+                if (type.equals("DAILY")) {
+                    // new daily debt
+                    long daysBetween = DAYS.between(date_in, date_out);
+                    Double debt = SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getRentPerDay();
+                    double balance = debt * daysBetween;
+                    SqlConnection.getSqlConnection().insertDebt(id_reserve, date_out.toString(), balance);
+                } else if (type.equals("MONTHLY")) {
+                    // new monthly debt
+                    double balance = SqlConnection.getSqlConnection().getTypeRoomByID(room.getId_type_room()).getRentPerMonth();
+                    for (int i = 1; i <= count; i++) {
+                        LocalDate date = date_in.plusMonths(i);
+                        SqlConnection.getSqlConnection().insertDebt(id_reserve, date.toString(), balance);
+                    }
                 }
+                GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
+                gridPane.getChildren().setAll(pane);
             }
-            GridPane pane = FXMLLoader.load(getClass().getResource("/fxml/Feature1Page1.fxml"));
-            gridPane.getChildren().setAll(pane);
+
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ไม่สามารถเพิ่มการจองได้");
+            alert.setHeaderText("โปรดกรอกข้อมูลให้ครบก่อนกดยืนยัน");
+            alert.showAndWait();
         }
     }
 
