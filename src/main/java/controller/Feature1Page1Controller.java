@@ -275,6 +275,7 @@ public class Feature1Page1Controller {
                                         if (reserveType == MONTHLY) {
                                             controller.setType("MOTHLY");
                                             controller.setDate_out(date_in.plusMonths(numMonthField.getValue()));
+                                            controller.setCount(numMonthField.getValue());
                                         }
                                         else if (reserveType == DAILY) {
                                             controller.setType("DAILY");
