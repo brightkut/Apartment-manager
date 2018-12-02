@@ -724,6 +724,25 @@ public class SqlConnection {
 
         return r;
     }
+    public void deleteReservationById(int id){
+
+        Connection c = connect();
+
+        try {
+            if (c != null) {
+                String query = "Update Reservation Set status = ? Where id_reserve = ?";
+
+                PreparedStatement ps = c.prepareStatement(query);
+                ps.setString(1,"unactive");
+                ps.setInt(2,id);
+                ps.executeUpdate();
+                ps.close();
+                c.close();
+            }
+        }catch (SQLException e){
+            System.out.println(e);
+        }
+    }
 
     public ArrayList<Reservation> selectReservationWithRoom(int id) {
         Connection c = connect();
