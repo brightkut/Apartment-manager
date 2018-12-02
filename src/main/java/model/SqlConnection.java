@@ -210,7 +210,7 @@ public class SqlConnection {
         Connection c = connect();
         String nameApartment ="";
         try {
-            System.out.println("aa");
+//            System.out.println("aa");
             if (c != null) {
                 String query = "Select name_apartment from Apartment where status = 'active' ";
                 Statement s = c.createStatement();
