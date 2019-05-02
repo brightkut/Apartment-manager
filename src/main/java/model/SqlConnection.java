@@ -8,9 +8,7 @@ import java.util.*;
 public class SqlConnection {
 
     private static SqlConnection sqlConnection =null;
-
-
-
+    
     private SqlConnection(){};
 
     public static SqlConnection getSqlConnection() {
@@ -832,6 +830,7 @@ public class SqlConnection {
                     LocalDate ld2 = LocalDate.parse(date_check_out_of_database);
                     if (!(date_out.isBefore(ld1) || date_in.isAfter(ld2)))
                         r.add(rs.getInt(4));
+
 
                 }
 
